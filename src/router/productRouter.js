@@ -4,13 +4,21 @@ const Loading = <div>Loading........</div>
 
 const Product = lazy(() => import("../pages/pdInfo/ProductPage"))
 
+const Item = lazy(() => import("../pages/categories/ProductListPage"))
+
 const ProductModify = lazy(() => import("../pages/pdInfo/ProductModifyPage"))
 
 const ProductInsert = lazy(() => import("../pages/pdInfo/ProductAddPage"))
 
 
 const productRouter = () => {
+
+
     return [
+        {
+            path: 'product/item/:categoryNo/:itemNo',
+            element:<Suspense fallback={Loading}><Item/></Suspense>
+        },
         {
             path: 'product/:pdNo',
             element: <Suspense fallback={Loading}><Product/></Suspense>

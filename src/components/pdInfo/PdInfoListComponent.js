@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PageCustomMove from '../../hocks/pageCustomMove';
-import { selectListByPdInfo } from '../../api/pdInfoApi';
+import { API_SERVER_HOST, selectListByPdInfo } from '../../api/pdInfoApi';
 import PageComponent from '../common/PageComponent';
+import { useParams } from 'react-router-dom';
+import FetchingModal from '../common/FetchingModal';
+
+export const host = API_SERVER_HOST
 
 
 const initState = {
@@ -10,24 +14,32 @@ const initState = {
   pageRequestDTO: null,
   prev: false,
   next: false,
-  totalCount: 38,
+  totalCount: 0,
   prevPage: 0,
-  nextPage: 5,
+  nextPage: 0,
   totalPage: 0,
   current: 0
 }
 
 function PdInfoListComponent() {
 
+  const { categoryNo, itemNo } = useParams()
   const [pdIndfoList, setPdInfoList] = useState(initState)
   const { page, size, pageList, refresh, movePagePdInfo } = PageCustomMove()
+  const { fetching, setFetching } = useState(false)
+  
+
+  console.log("PdInfoListComponent")
+  console.log(categoryNo, itemNo, page)
 
   useEffect(() => {
-    selectListByPdInfo({ page, size }).then(data => {
-      console.log(data)
+    //setFetching(true)
+    selectListByPdInfo({categoryNo,itemNo, page, size }).then(data => {
+      //setFetching(false)
       setPdInfoList(data)
+
     })
-  }, [page, size, refresh])
+  }, [categoryNo, itemNo, page, size, refresh])
 
   return (
     //   <div className="bg-white">
@@ -73,11 +85,12 @@ function PdInfoListComponent() {
     //   <PageComponent pdIndfoList={pdIndfoList} movePage={pageList} />
     // </div>
     <div className="w-full grid grid-cols-5 gap-5">
+      {/* {fetching ? <FetchingModal/>:<></>} */}
       {pdIndfoList.dtoList.map((pdInfo) => (
         <div className="w-full relative group">
           <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
-            <div onClick={()=> movePagePdInfo(pdInfo.pdNo)}>
-              <img className="w-full h-full" src={`/public_assets/sample_Img.jpg`}/>
+            <div onClick={() => movePagePdInfo(pdInfo.pdNo)}>
+              <img className="w-full h-full" src={`${host}/product/view/s_${pdInfo.imageList[0]}`} />
             </div>
             {/* <div className="absolute top-6 left-8">
               {props.badge && <Badge text="New" />}
@@ -145,7 +158,9 @@ function PdInfoListComponent() {
           </div>
         </div>
       ))}
-      <PageComponent pdIndfoList={pdIndfoList} movePage={pageList} />
+      <div>
+        <PageComponent pdIndfoList={pdIndfoList} movePage={pageList} categoryNo={categoryNo} itemNo={itemNo}/>
+      </div>
     </div>
   );
 }

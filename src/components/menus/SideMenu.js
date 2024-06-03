@@ -13,17 +13,18 @@ import {
 
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { selectListCategory } from '../../api/categoryApi';
+import PageCustomMove from '../../hocks/pageCustomMove';
 
 function SideMenu() {
 
     const [categoryList, setCategoryList] = useState([])
+    const { pageList } = PageCustomMove();
 
     useEffect(() => {
         selectListCategory().then(data => {
             setCategoryList(data)
         })
     }, [])
-
 
     const [open, setOpen] = React.useState(-1);
 
@@ -61,10 +62,17 @@ function SideMenu() {
                                 <AccordionBody className="py-1">
                                     <List className="p-0 grid grid-cols-2">
                                         <ListItem>
-                                            <ul className="flex flex-col gap-y-1 text-sm lg:text-base text-[#767676]">
+                                            <ul className="flex flex-col gap-y-1 text-sm lg:text-base text-[#767676]"
+                                                onClick={() => pageList({categoryNo:category.categoryNo,itemNo:item.itemNo})}
+                                            >
                                                 <li className="border-b-[1px] border-b-[#F0F0F0] pb-2 flex items-center gap-y-1 hover:text-primeColor hover:border-gray-400 duration-300">
                                                     {item.itemNm}
                                                 </li>
+                                                {/* <Link to={`/product/item/${category.categoryNo}/${item.itemNo}`}>
+                                                    <li className="border-b-[1px] border-b-[#F0F0F0] pb-2 flex items-center gap-y-1 hover:text-primeColor hover:border-gray-400 duration-300">
+                                                        {item.itemNm}
+                                                    </li>
+                                                </Link> */}
                                             </ul>
                                         </ListItem>
                                     </List>

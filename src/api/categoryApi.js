@@ -8,3 +8,8 @@ export const selectListCategory = async () => {
     const res = await axios.get(`${prefix}/`) 
     return res.data
 }
+
+export const selectListItem = async (categoryNo) => {
+    const res = await axios.get(`${prefix}/item/${categoryNo}`) 
+    return res.data
+}

@@ -10,14 +10,26 @@ export const selectPdInfoByPdNo = async (pdNo) => {
     return res.data
 }
 
-export const selectListByPdInfo = async (pageParam) => {
-    const {page, size} = pageParam
-    const res = await axios.get(`${prefix}/productList`,{params:{page,size}}) 
-    return res.data
-}
+// export const selectListByPdInfo = async (pageParam) => {
+//     const {page, size, categoryNo, itemNo} = pageParam
+//     console.log('api')
+//     console.log(page, size, categoryNo, itemNo)
+//     const res = await axios.get(`${prefix}/item/{${categoryNo}}/${itemNo}`,{params:{page,size}}) 
+//     return res.data
+// }
+
+//export const selectListByPdInfo = async ({categoryNo,itemNo},pageParam) => {
+    export const selectListByPdInfo = async (pageParam) => {
+        const {categoryNo,itemNo, page, size} = pageParam
+        console.log('api')
+        console.log(page, size, categoryNo, itemNo)
+        const res = await axios.get(`${prefix}/item/${categoryNo}/${itemNo}`,{params:{page,size}}) 
+        return res.data
+    }
 
 export const insertPdInfo = async (pdInfo) => {
-    const res = await axios.post(`${prefix}/insertPdInfo`,pdInfo)
+    const header = {header: {'Content-Tpye':'multipart/form-data'}}
+    const res = await axios.post(`${prefix}/insertPdInfo`,pdInfo,header)
     return res.data
 }
 

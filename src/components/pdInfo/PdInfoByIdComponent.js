@@ -1,10 +1,13 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { removePdInfo, selectPdInfoByPdNo } from '../../api/pdInfoApi';
+import { API_SERVER_HOST, removePdInfo, selectPdInfoByPdNo } from '../../api/pdInfoApi';
 import PageCustomMove from '../../hocks/pageCustomMove';
 import { Typography } from '@material-tailwind/react';
 import ResultModal from '../common/ResultModal';
+
+export const host = API_SERVER_HOST
+
 
 const initState = {
     brandNo: '',
@@ -13,21 +16,29 @@ const initState = {
     pdNo: '',
     startDate: '',
     pdName: '',
+    brandNm: '',
     endDate: '',
-    buyAmt: '',
+    buyAmt: 0,
     likeCnt: '',
     pdImage: '',
     sexCd: '',
-    note: ''
+    note: '',
+    imageList: [],
+    sizeList: []
+
 }
 
-function PdInfoByIdComponent({pdNo}) {
-    
+function PdInfoByIdComponent({ pdNo }) {
+
     const [pdInfo, setPdInfo] = useState(initState)
 
-    const {pageList,modifyPage } = PageCustomMove()
+    const { pageList, modifyPage } = PageCustomMove()
 
     const [result, setResult] = useState(null)
+
+    const [activeImg, setActiveImage] = useState()
+
+    const [amount, setAmount] = useState(1);
 
     useEffect(() => {
 
@@ -45,18 +56,7 @@ function PdInfoByIdComponent({pdNo}) {
         })
     }
 
-    const [images, setImages] = useState({
-        img1: "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,b_rgb:f5f5f5/3396ee3c-08cc-4ada-baa9-655af12e3120/scarpa-da-running-su-strada-invincible-3-xk5gLh.png",
-        img2: "https://static.nike.com/a/images/f_auto,b_rgb:f5f5f5,w_440/e44d151a-e27a-4f7b-8650-68bc2e8cd37e/scarpa-da-running-su-strada-invincible-3-xk5gLh.png",
-        img3: "https://static.nike.com/a/images/f_auto,b_rgb:f5f5f5,w_440/44fc74b6-0553-4eef-a0cc-db4f815c9450/scarpa-da-running-su-strada-invincible-3-xk5gLh.png",
-        img4: "https://static.nike.com/a/images/f_auto,b_rgb:f5f5f5,w_440/d3eb254d-0901-4158-956a-4610180545e5/scarpa-da-running-su-strada-invincible-3-xk5gLh.png"
-    })
-
-    const [activeImg, setActiveImage] = useState(images.img1)
-
-    const [amount, setAmount] = useState(1);
-
-    const closeModal = () =>{
+    const closeModal = () => {
         pageList()
     }
 
@@ -65,12 +65,20 @@ function PdInfoByIdComponent({pdNo}) {
             <div className='flex flex-col justify-center lg:flex-row gap-16 lg:items-center'>
                 {/* 이미지 */}
                 <div className='flex flex-col gap-6 lg:w-2/4'>
-                    <img src={activeImg} alt="" className='w-full h-full aspect-square object-cover rounded-xl' />
+                    <img src={`${host}/product/view/` + activeImg} alt="" className='w-full h-full aspect-square object-cover rounded-xl' />
                     <div className='flex flex-row justify-between h-24'>
-                        <img src={images.img1} alt="" className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(images.img1)} />
-                        <img src={images.img2} alt="" className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(images.img2)} />
-                        <img src={images.img3} alt="" className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(images.img3)} />
-                        <img src={images.img4} alt="" className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(images.img4)} />
+                    <img src={`${host}/product/view/${pdInfo.imageList[0]}`}
+                                alt="pdInfo"
+                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[0])} />
+                    <img src={`${host}/product/view/${pdInfo.imageList[1]}`}
+                                alt="pdInfo"
+                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[1])} />
+                    <img src={`${host}/product/view/${pdInfo.imageList[2]}`}
+                                alt="pdInfo"
+                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[2])} />
+                    <img src={`${host}/product/view/${pdInfo.imageList[3]}`}
+                                alt="pdInfo"
+                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[3])} />
                     </div>
                 </div>
                 {/* 상품 */}
@@ -129,15 +137,20 @@ function PdInfoByIdComponent({pdNo}) {
                     </div>
                 </div>
             </div>
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-
-            </div>
-
-
+  
             <div className="border-b border-gray-900/20 pb-2" />
             <span className=' text-gray-700 font-semibold '>Info</span>
-            
-            {result ? <ResultModal title={'처리결과'} content={result} callbackFn={closeModal}/> : <></>}
+
+            <div className='w-full justify-center flex flex-col m-auto items-center'>
+                {pdInfo.imageList.map((fileNm, i) =>
+                    <img src={`${host}/product/view/${fileNm}`}
+                        alt="pdInfo"
+                        key={i}
+                        className='w-24 h-24 rounded-md cursor-pointer' />
+                )}
+            </div>
+
+            {result ? <ResultModal title={'처리결과'} content={result} callbackFn={closeModal} /> : <></>}
         </div>
 
 
