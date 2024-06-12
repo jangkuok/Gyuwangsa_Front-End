@@ -33,8 +33,10 @@ export const insertPdInfo = async (pdInfo) => {
     return res.data
 }
 
-export const modifyPdInfo = async (pdInfo) => {
-    const res = await axios.put(`${prefix}/modify/${pdInfo.brandNo}/${pdInfo.categoryNo}/${pdInfo.itemNo}/${pdInfo.pdNo}`,pdInfo)
+export const modifyPdInfo = async (pdInfo,pdNo) => {
+    const header = {header: {'Content-Tpye':'multipart/form-data'}}
+    const res = await axios.put(`${prefix}/modify/${pdNo}`,pdInfo,header)
+    //const res = await axios.put(`${prefix}/modifyPdInfo`,pdInfo,header)
     return res.data
 }
 

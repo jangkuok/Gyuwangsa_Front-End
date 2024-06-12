@@ -5,6 +5,8 @@ import { API_SERVER_HOST, removePdInfo, selectPdInfoByPdNo } from '../../api/pdI
 import PageCustomMove from '../../hocks/pageCustomMove';
 import { Typography } from '@material-tailwind/react';
 import ResultModal from '../common/ResultModal';
+import { BiShoppingBag } from 'react-icons/bi';
+import { AiOutlineHeart, AiOutlineHighlight, AiTwotoneDelete } from 'react-icons/ai';
 
 export const host = API_SERVER_HOST
 
@@ -60,85 +62,115 @@ function PdInfoByIdComponent({ pdNo }) {
         pageList()
     }
 
+    const plusMinuceButton =
+        "flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500";
+
+
     return (
         <div>
-            <div className='flex flex-col justify-center lg:flex-row gap-16 lg:items-center'>
-                {/* 이미지 */}
-                <div className='flex flex-col gap-6 lg:w-2/4'>
-                    <img src={`${host}/product/view/` + activeImg} alt="" className='w-full h-full aspect-square object-cover rounded-xl' />
-                    <div className='flex flex-row justify-between h-24'>
-                    <img src={`${host}/product/view/${pdInfo.imageList[0]}`}
-                                alt="pdInfo"
-                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[0])} />
-                    <img src={`${host}/product/view/${pdInfo.imageList[1]}`}
-                                alt="pdInfo"
-                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[1])} />
-                    <img src={`${host}/product/view/${pdInfo.imageList[2]}`}
-                                alt="pdInfo"
-                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[2])} />
-                    <img src={`${host}/product/view/${pdInfo.imageList[3]}`}
-                                alt="pdInfo"
-                                className='w-24 h-24 rounded-md cursor-pointer' onClick={() => setActiveImage(pdInfo.imageList[3])} />
-                    </div>
+            <section className="container flex-grow mx-auto max-w-[1200px] border-b py-5 lg:grid lg:grid-cols-2 lg:py-10">
+                {/* image gallery */}
+                <div className="container mx-0 px-3">
+                    <img src={`${host}/product/view/${pdInfo.imageList[0]}`} />
+                    {/* /image gallery  */}
                 </div>
-                {/* 상품 */}
-                <div className='flex flex-col gap-4 lg:w-2/4'>
-                    <div>
-                        <span className=' text-gray-700 font-semibold '>Product Info</span>
-                        <h1 className='text-3xl font-bold'>{pdInfo.pdName}</h1>
-                    </div>
-                    <div className="border-b border-gray-900/20 pb-2">
-                        <p className='text-gray-700 font-bold'>
-                            브랜드 / 상품 번호{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{pdInfo.brandNo} / {pdInfo.pdNo}
-                        </p>
-                        <p className='text-gray-700 font-bold'>
-                            성별 {"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{pdInfo.sexCd}
-                        </p>
+                {/* description  */}
 
-                        <p className='text-gray-700 font-bold'>
-                            좋아요 {"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{"\u00A0"}{pdInfo.likeCnt}
-                        </p>
+                <div className="mx-0 px-5 lg:px-5">
+                    <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+                        {pdInfo.pdName}
+                    </h2>
+                    {/* 브랜드 */}
+                    <div className="grid grid-cols-4 gap-1">
+                        <p className="mt-5 font-bold"> 브랜드 </p>
+                        <p className="mt-5 font-bold text-gray-400"> {pdInfo.brandNm} </p>
                     </div>
-
-                    <Typography color="blue-gray" variant="h6">
-                        Color
-                    </Typography>
-                    <div className="my-8 mt-3 flex items-center gap-2">
-                        <div className="h-5 w-5 rounded border border-gray-900 bg-blue-gray-600 "></div>
-                        <div className="h-5 w-5 rounded border border-blue-gray-100 "></div>
-                        <div className="h-5 w-5 rounded border border-blue-gray-100 bg-gray-900 "></div>
+                    {/* 성별 */}
+                    <div className="grid grid-cols-4 gap-1">
+                        <p className="mt-5 font-bold"> 성별 </p>
+                        <p className="mt-5 font-bold text-gray-400"> {pdInfo.sexCd} </p>
                     </div>
-
-                    <h6 className='text-2xl font-semibold'> \ {pdInfo.buyAmt}</h6>
-                    <div className='flex flex-row items-center gap-12'>
-                        <div className='flex flex-row items-center'>
-                            <button className='bg-gray-200 py-2 px-5 rounded-lg text-gray-900 text-3xl' onClick={() => setAmount((prev) => prev - 1)}>-</button>
-                            <span className='py-4 px-6 rounded-lg'>{amount}</span>
-                            <button className='bg-gray-200 py-2 px-4 rounded-lg text-gray-900 text-3xl' onClick={() => setAmount((prev) => prev + 1)}>+</button>
+                    {/* 좋아요 */}
+                    <div className="grid grid-cols-4 gap-1">
+                        <p className="mt-5 font-bold"> 좋아요 </p>
+                        <p className="mt-5 font-bold text-gray-400"> {pdInfo.likeCnt} </p>
+                    </div>
+                    {/* 가격 */}
+                    <p className="mt-4 text-4xl font-bold">
+                        \{pdInfo.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    </p>
+                    {/* 설명 */}
+                    <p className="pt-5 text-sm leading-5 text-gray-500">
+                        {pdInfo.note}
+                    </p>
+                    {/* 사이즈 */}
+                    <div className="mt-6">
+                        <p className="pb-2 text-xs text-gray-500">사이즈</p>
+                        <div className="flex gap-1">
+                            {pdInfo.sizeList.map((size, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    >
+                                        {size.sizeTpye}
+                                    </div>
+                                );
+                            })}
                         </div>
-                        <button className='bg-gray-900 text-white font-semibold py-3 px-16 rounded-xl h-full'>Add to Cart</button>
                     </div>
-
-                    <div className='flex flex-row items-center gap-12'>
+                    {/* 색상 */}
+                    <div className="mt-6">
+                        <p className="pb-2 text-xs text-gray-500">색  상</p>
+                        <div className="flex gap-1">
+                            {pdInfo.sizeList.map((size, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`h-8 w-8 cursor-pointer border border-white bg-${size.colorCode}-600 focus:ring-2 focus:ring-${size.colorCode}-500 active:ring-2 active:ring-${size.colorCode}-500`}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+                    {/* 수량 */}
+                    <div className="mt-6">
+                        <p className="pb-2 text-xs text-gray-500">수  량</p>
+                        <div className="flex">
+                            <button className={`${plusMinuceButton}`} onClick={() => setAmount((prev) => prev - 1)}>−</button>
+                            <div className="flex h-8 w-8 cursor-text items-center justify-center border-t border-b active:ring-gray-500">
+                                {amount}
+                            </div>
+                            <button className={`${plusMinuceButton}`} onClick={() => setAmount((prev) => prev + 1)}> +</button>
+                        </div>
+                    </div>
+                    <div className="mt-7 flex flex-row items-center gap-6">
+                        <button className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-blue-800">
+                            <BiShoppingBag className="mx-2" />
+                            Add to cart
+                        </button>
+                        <button className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-red-500">
+                            <AiOutlineHeart className="mx-2" />
+                            Wishlist
+                        </button>
+                    </div>
+                    <div className="mt-7 flex flex-row items-center gap-6">
                         <button
-                            type="button"
                             onClick={() => modifyPage(pdInfo)}
-                            className='bg-gray-900 text-white font-semibold py-3 px-16 rounded-xl h-full'
-                        >
+                            className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-gray-700">
+                            <AiOutlineHighlight className="mx-2" />
                             수  정
                         </button>
                         <button
-                            type="button"
                             onClick={handleClickRemove}
-                            className='bg-gray-100 text-gray-900 font-semibold py-3 px-16 rounded-xl h-full'
-                        >
+                            className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-gray-400">
+                            <AiTwotoneDelete className="mx-2" />
                             삭  제
                         </button>
                     </div>
                 </div>
-            </div>
-  
-            <div className="border-b border-gray-900/20 pb-2" />
+            </section>
+
             <span className=' text-gray-700 font-semibold '>Info</span>
 
             <div className='w-full justify-center flex flex-col m-auto items-center'>
@@ -146,7 +178,7 @@ function PdInfoByIdComponent({ pdNo }) {
                     <img src={`${host}/product/view/${fileNm}`}
                         alt="pdInfo"
                         key={i}
-                        className='w-24 h-24 rounded-md cursor-pointer' />
+                        />
                 )}
             </div>
 
