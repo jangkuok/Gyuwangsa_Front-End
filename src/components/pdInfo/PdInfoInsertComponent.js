@@ -124,6 +124,7 @@ function PdInfoInsertComponent() {
         //movePagePdInfo(pdNo)
     }
 
+    const textTpyeClass = 'text-base text-gray-500 font-semibold mb-2 block'
     const textClass = 'block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
     const selectClass = 'block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
     const plusMinuceButton =
@@ -143,7 +144,7 @@ function PdInfoInsertComponent() {
 
                         {/* 브랜드 */}
                         <div className="sm:col-span-2">
-                            <label class="text-base text-gray-500 font-semibold mb-2 block">
+                            <label class={textTpyeClass}>
                                 브랜드
                             </label>
                             <div className="mt-2">
@@ -162,7 +163,7 @@ function PdInfoInsertComponent() {
 
                         {/* 카테고리 */}
                         <div className="sm:col-span-2">
-                            <label className="text-base text-gray-500 font-semibold mb-2 block">
+                            <label className={textTpyeClass}>
                                 품  목
                             </label>
                             <div className="mt-2">
@@ -186,7 +187,7 @@ function PdInfoInsertComponent() {
 
                         {/* 아이템 */}
                         <div className="sm:col-span-2">
-                            <label className="text-base text-gray-500 font-semibold mb-2 block">
+                            <label className={textTpyeClass}>
                                 종  류
                             </label>
                             <div className="mt-2">
@@ -208,7 +209,7 @@ function PdInfoInsertComponent() {
 
                         {/* 삼품이름 */}
                         <div className="sm:col-span-2 sm:col-start-1">
-                            <label className="text-base text-gray-500 font-semibold mb-2 block">
+                            <label className={textTpyeClass}>
                                 상품 이름
                             </label>
                             <div className="mt-2">
@@ -225,7 +226,7 @@ function PdInfoInsertComponent() {
 
                         {/* 가격 */}
                         <div className="sm:col-span-2">
-                            <label className="text-base text-gray-500 font-semibold mb-2 block">
+                            <label className={textTpyeClass}>
                                 가  격
                             </label>
                             <div className="mt-2">
@@ -242,7 +243,7 @@ function PdInfoInsertComponent() {
 
                         {/* 성별 */}
                         <div className="sm:col-span-2">
-                            <label className="text-base text-gray-500 font-semibold mb-2 block">
+                            <label className={textTpyeClass}>
                                 성  별
                             </label>
                             <div className="mt-2">
@@ -312,7 +313,7 @@ function PdInfoInsertComponent() {
                 </div>
 
                 {/* 버튼 */}
-                <div className="mt-6 flex items-center justify-end gap-x-6">
+                <div className={textTpyeClass}>
                     <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
                         Cancel
                     </button>

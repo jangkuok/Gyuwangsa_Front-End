@@ -43,7 +43,7 @@ function SideMenu() {
             <Card className="h-[calc(100vh-1rem)] w-full max-w-[20rem] p-1 ">
                 <List>
                     {categoryList.map((category, index) => (
-                        <Accordion
+                        <Accordion key={index}
                             open={open === index}
                             icon={
                                 <ChevronDownIcon
@@ -63,8 +63,8 @@ function SideMenu() {
                             </ListItem>
                             <hr className="my-2 border-blue-gray-50 " />
                             <div className=' grid grid-cols-2'>
-                                {category.pdItemList.map((item) => (
-                                    <AccordionBody className="py-0.5">
+                                {category.pdItemList.map((item,i) => (
+                                    <AccordionBody className="py-0.5" key={i}>
                                         <List className="p-0">
                                             <ListItem>
                                                 <ul className="text-xs lg:text-base text-[#767676] "

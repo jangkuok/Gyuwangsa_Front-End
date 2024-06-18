@@ -7,6 +7,7 @@ import { Typography } from '@material-tailwind/react';
 import ResultModal from '../common/ResultModal';
 import { BiShoppingBag } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlineHighlight, AiTwotoneDelete } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
 
 export const host = API_SERVER_HOST
 
@@ -31,6 +32,8 @@ const initState = {
 }
 
 function PdInfoByIdComponent({ pdNo }) {
+
+    const loginState = useSelector(state => state.loginSlice)
 
     const [pdInfo, setPdInfo] = useState(initState)
 
@@ -154,20 +157,24 @@ function PdInfoByIdComponent({ pdNo }) {
                             Wishlist
                         </button>
                     </div>
-                    <div className="mt-7 flex flex-row items-center gap-6">
-                        <button
-                            onClick={() => modifyPage(pdInfo)}
-                            className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-gray-700">
-                            <AiOutlineHighlight className="mx-2" />
-                            수  정
-                        </button>
-                        <button
-                            onClick={handleClickRemove}
-                            className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-gray-400">
-                            <AiTwotoneDelete className="mx-2" />
-                            삭  제
-                        </button>
-                    </div>
+
+                    {loginState.roleNm ?
+
+                        <div className="mt-7 flex flex-row items-center gap-6">
+                            <button
+                                onClick={() => modifyPage(pdInfo)}
+                                className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-gray-700">
+                                <AiOutlineHighlight className="mx-2" />
+                                수  정
+                            </button>
+                            <button
+                                onClick={handleClickRemove}
+                                className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-gray-400">
+                                <AiTwotoneDelete className="mx-2" />
+                                삭  제
+                            </button>
+                        </div>
+                        : <></>}
                 </div>
             </section>
 
@@ -178,7 +185,7 @@ function PdInfoByIdComponent({ pdNo }) {
                     <img src={`${host}/product/view/${fileNm}`}
                         alt="pdInfo"
                         key={i}
-                        />
+                    />
                 )}
             </div>
 
