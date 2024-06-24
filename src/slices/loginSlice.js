@@ -16,6 +16,7 @@ const loadUserCookie = () => {
     return userInfo
 }
 
+
 export const loginPostAsync = createAsyncThunk('loginPostAsync',(param)=>loginPost(param))
 
 const loginSlice = createSlice({
@@ -24,11 +25,16 @@ const loginSlice = createSlice({
     reducers : {
         login : (state, action) => {
             console.log("login.....")
-            return {userId:action.payload.userId}
+
+            setCookie('user',JSON.stringify(action.payload),1)
+            console.log(JSON.stringify(action.payload))
+
+            //return {userId:action.payload.userId}
+            return action.payload
         },
         logout : () => {
             console.log("logout.....")
-            removeCookie('user')
+            removeCookie("user")
             return {...initState}
         }
     },
@@ -40,7 +46,7 @@ const loginSlice = createSlice({
             const payload = action.payload
 
             if(!payload.error){
-                setCookie('user',JSON.stringify(payload))
+                setCookie('user',JSON.stringify(payload),1)
             }
 
             console.log(payload)

@@ -25,8 +25,6 @@ const PageCustomMove = () => {
     const queryDefault = createSearchParams({page,size}).toString()
 
     const pageList = (pageParam) =>{
-        console.log("pageList")
-        console.log(pageParam.categoryNo,pageParam.itemNo,pageParam.page)
         
         let queryStr = "";
 
@@ -35,7 +33,6 @@ const PageCustomMove = () => {
             const sizeNum = getNum(pageParam.size,20)
 
 
-            console.log('params' + pageParam.categoryNo)
  
             queryStr = createSearchParams({page:pageNum,size:sizeNum}).toString()
 
@@ -47,8 +44,6 @@ const PageCustomMove = () => {
 
         setRefresh(!refresh)
 
-        console.log("pageList2")
-        console.log(pageParam.categoryNo,pageParam.itemNo,pageParam.page)
         navigate({pathname:`../product/item/${pageParam.categoryNo}/${pageParam.itemNo}`, search:queryStr})
     }
 
@@ -61,10 +56,8 @@ const PageCustomMove = () => {
 
     const movePagePdInfo = (num) => {
         
-        console.log("PAGE CUS")
-        console.log(num)
         navigate({
-            pathname:`../product/${num}`,
+            pathname:`../product/info/${num}`,
             search:queryDefault
         })
     }

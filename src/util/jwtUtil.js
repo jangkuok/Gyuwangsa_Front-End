@@ -2,15 +2,15 @@ import axios from "axios";
 import { getCookie, setCookie } from "./cookieUtil";
 import { API_SERVER_HOST } from "../api/pdInfoApi";
 
-const jswAxios = axios.create()
+const jwtAxios = axios.create()
 
-const userInfo = getCookie('user')
+const userInfo = getCookie("user")
 
 const refreshJWT = async (accessToken, refreshToken) => {
 
     const host = API_SERVER_HOST
 
-    const header = {headers:{'Authorization':`Bearer ${accessToken}`}}
+    const header = {headers: {"Authorization":`Bearer ${accessToken}`}}
 
     const form = new FormData()
     form.append('refreshToken',refreshToken)
@@ -26,6 +26,9 @@ const refreshJWT = async (accessToken, refreshToken) => {
 
 //axios 데이터 전송 시
 const beforeReq = (config) => {
+
+    console.log("axios 전송")
+
     if (!userInfo) {
         return Promise.reject(
             {
@@ -50,26 +53,25 @@ const beforeReq = (config) => {
 
 //전송 실패 시
 const requsetFail = (err) =>{
+    console.log("전송 실패")
     return Promise.reject(err)
 }
 
 //토큰 값 유효 기간 만료 시
 const beforeRes = async (res) =>{
 
-    console.log("--------before return response--------")
+    console.log("--------beforeRes--------")
 
+    //에러 토큰
     const data = res.data
-    if(data && data.error === 'ERROR_ACCESS_TOKEN'){
 
-        console.log("에러가 있을 경우")
+    if(data && data.error === 'ERROR_ACCESS_TOKEN'){
 
         const userCookieValue = getCookie('user')
 
         console.log(userCookieValue)
 
         const result = await refreshJWT(userCookieValue.accessToken,userCookieValue.refreshToken)
-
-        console.log("안녕")
 
         //새로운 accessToken / refreshToken
         userCookieValue.accessToken = result.accessToken
@@ -80,8 +82,9 @@ const beforeRes = async (res) =>{
 
         //에러 제거를 위해 Header 변경
         const originalRequest = res.config
-        originalRequest.header.Authorization = `Bearer ${result.accessToken}`
 
+        originalRequest.headers.Authorization = `Bearer ${result.accessToken}`
+    
         return await axios(originalRequest)
     }
     return res
@@ -91,9 +94,7 @@ const beforeRes = async (res) =>{
 const responseFail = (err) =>{
     return Promise.reject(err)
 }
+jwtAxios.interceptors.request.use(beforeReq,requsetFail)
+jwtAxios.interceptors.response.use(beforeRes,responseFail)
 
-jswAxios.interceptors.request.use(beforeReq,requsetFail)
-jswAxios.interceptors.response.use(beforeRes,responseFail)
-
-
-export default jswAxios
+export default jwtAxios

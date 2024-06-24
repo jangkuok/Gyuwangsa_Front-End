@@ -20,7 +20,7 @@ const productRouter = () => {
             element:<Suspense fallback={Loading}><Item/></Suspense>
         },
         {
-            path: 'product/:pdNo',
+            path: 'product/info/:pdNo',
             element: <Suspense fallback={Loading}><Product/></Suspense>
         },
         {

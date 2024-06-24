@@ -28,10 +28,6 @@ function PdInfoListComponent() {
   const { page, size, pageList, refresh, movePagePdInfo } = PageCustomMove()
   const { fetching, setFetching } = useState(false)
 
-
-  console.log("PdInfoListComponent")
-  console.log(categoryNo, itemNo, page)
-
   useEffect(() => {
     //setFetching(true)
     selectListByPdInfo({ categoryNo, itemNo, page, size }).then(data => {

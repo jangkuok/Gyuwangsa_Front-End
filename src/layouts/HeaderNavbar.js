@@ -9,13 +9,14 @@ function HeaderNavbar() {
 
   const loginState = useSelector(state => state.loginSlice)
 
-  const { doLogout } = UserCustomLogin()
+  const { doLogout,moveToPath } = UserCustomLogin()
 
   const dispatch = useDispatch()
 
   const logoutButton = () => {
     doLogout()
   }
+
 
   return (
     <div className="w-full h-20 bg-black sticky top-0 z-50 border-b-[1px] border-b-gray-200">
@@ -28,7 +29,7 @@ function HeaderNavbar() {
           </Link>
           {loginState.userId ?
             <div>
-              <Link to="/myPage" className="text-white mr-3">
+              <Link to="/user/myPage" className="text-white mr-3">
                 마이페이지
               </Link>
               <a onClick={logoutButton} className="text-white">로그아웃</a>

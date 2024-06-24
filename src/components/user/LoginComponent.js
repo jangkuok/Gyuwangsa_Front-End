@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login, loginPostAsync } from '../../slices/loginSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import userCustomLogin from '../../hocks/userCustomLogin';
+import { getKakaoLoginLink } from '../../api/kakaoApi';
 
 const initState = {
     userId: '',
@@ -13,14 +14,13 @@ function LoginComponent(props) {
 
     const [loginParam, setLoginParam] = useState({ ...initState })
 
-    const dispatch = useDispatch()
-
-    const navigate = useNavigate()
-
     const { doLogin, moveToPath } = userCustomLogin()
 
     const textTpyeClass = 'text-base text-gray-500 font-semibold mb-2 block'
     const textClass = 'block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
+
+
+    const link = getKakaoLoginLink()
 
     const handleChange = (e) => {
         loginParam[e.target.name] = e.target.value
@@ -42,9 +42,13 @@ function LoginComponent(props) {
             if (data.error) {
                 alert("아이디와 비밀번호를 확인해주세요")
             } else {
-               moveToPath('/')
+                window.location.replace("/")
             }
         })
+    }
+
+    const joinPage = () => {
+        moveToPath("/userJoinPage")
     }
 
     return (
@@ -95,7 +99,21 @@ function LoginComponent(props) {
                         className="flex w-full h-10 justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         onClick={loginButton}
                     >
-                        로 그 인
+                        로  그  인
+                    </button>
+                    <button
+                        type="submit"
+                        className="flex w-full h-10 justify-center rounded-md bg-yellow-400 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-yellow-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                        <Link to={link}>카카오 로그인</Link>
+
+                    </button>
+                    <button
+                        type="submit"
+                        className="flex w-full h-10 justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={joinPage}
+                    >
+                        회원가입
                     </button>
                 </div>
             </div>

@@ -1,6 +1,4 @@
-import React from 'react';
 import { API_SERVER_HOST } from './pdInfoApi';
-import { Await } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -17,4 +15,16 @@ export const loginPost = async(loginParam) => {
 
     return res.data
 
+}
+
+export const joinUserInfo = async(user) => {
+    const res = await axios.post(`${host}/userJoin`,user)
+
+    return res.data
+}
+
+export const modifyUserInfo = async(user) => {
+    const res = await axios.put(`${host}/modify`,user)
+
+    return res.data
 }

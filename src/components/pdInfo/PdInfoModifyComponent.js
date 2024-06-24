@@ -111,7 +111,7 @@ function PdInfoModifyComponent({ pdNo }) {
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GYUWANGSA</h2>
                 </div>
                 <div className="border-b border-gray-900/10 pb-12">
-                    <label class="text-base text-gray-500 font-semibold mb-2 block">상품 등록</label>
+                    <label className="text-base text-gray-500 font-semibold mb-2 block">상품 등록</label>
                     {/* <h2 className="text-base font-semibold leading-7 text-gray-900">상품 등록</h2> */}
                     <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

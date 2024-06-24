@@ -15,7 +15,7 @@ function PageComponent({pdIndfoList,movePage,categoryNo,itemNo}) {
                 <div className={`m-2 p-2 w-16 text-center ${pdIndfoList.current === pageNum ?'bg-gray-500':'bg-blue-400'} cursor-pointer`}
                      key={pageNum}
                     //  onClick={() => pageList({page:pageNum,categoryNo:categoryNo,itemNo:itemNo})}>
-                        onClick={() => {movePage({page:pageNum,categoryNo:categoryNo,itemNo:itemNo}); console.log("밑에 번호 : " + categoryNo,itemNo,pageNum)}}>
+                        onClick={() => {movePage({page:pageNum,categoryNo:categoryNo,itemNo:itemNo});}}>
                      {pageNum}   
                 </div> 
             )}

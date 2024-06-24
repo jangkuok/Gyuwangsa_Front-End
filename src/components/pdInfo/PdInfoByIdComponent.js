@@ -7,7 +7,6 @@ import { Typography } from '@material-tailwind/react';
 import ResultModal from '../common/ResultModal';
 import { BiShoppingBag } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlineHighlight, AiTwotoneDelete } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
 
 export const host = API_SERVER_HOST
 
@@ -32,8 +31,6 @@ const initState = {
 }
 
 function PdInfoByIdComponent({ pdNo }) {
-
-    const loginState = useSelector(state => state.loginSlice)
 
     const [pdInfo, setPdInfo] = useState(initState)
 
@@ -157,9 +154,6 @@ function PdInfoByIdComponent({ pdNo }) {
                             Wishlist
                         </button>
                     </div>
-
-                    {loginState.roleNm ?
-
                         <div className="mt-7 flex flex-row items-center gap-6">
                             <button
                                 onClick={() => modifyPage(pdInfo)}
@@ -174,7 +168,6 @@ function PdInfoByIdComponent({ pdNo }) {
                                 삭  제
                             </button>
                         </div>
-                        : <></>}
                 </div>
             </section>
 
