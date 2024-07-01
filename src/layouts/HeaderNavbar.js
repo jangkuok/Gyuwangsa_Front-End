@@ -32,6 +32,9 @@ function HeaderNavbar() {
               <Link to="/user/myPage" className="text-white mr-3">
                 마이페이지
               </Link>
+              <Link to="/user/cartPage" className="text-white mr-3">
+                장바구니
+              </Link>
               <a onClick={logoutButton} className="text-white">로그아웃</a>
             </div>
             :

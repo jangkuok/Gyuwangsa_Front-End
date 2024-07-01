@@ -29,14 +29,14 @@ export const selectListByPdInfo = async (pageParam) => {
 }
 
 export const insertPdInfo = async (pdInfo) => {
-    const header = { headers: { 'Content-Tpye': 'multipart/form-data' } }
+    const header = { header: { 'Content-Tpye': 'multipart/form-data' } }
     //const res = await axios.post(`${prefix}/insertPdInfo`, pdInfo, header)
-    const res = await jwtAxios.post(`${prefix}/insertPdInfo`, pdInfo, header)
+    const res = await axios.post(`${prefix}/insertPdInfo`, pdInfo, header)
     return res.data
 }
 
 export const modifyPdInfo = async (pdInfo, pdNo) => {
-    const header = { headers: { 'Content-Tpye': 'multipart/form-data' } }
+    const header = { header: {'Content-Tpye':'multipart/form-data'} }
     //const res = await axios.put(`${prefix}/modify/${pdNo}`, pdInfo, header)
     const res = await jwtAxios.put(`${prefix}/modify/${pdNo}`, pdInfo, header)
     return res.data

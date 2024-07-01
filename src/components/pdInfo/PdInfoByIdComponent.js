@@ -7,6 +7,9 @@ import { Typography } from '@material-tailwind/react';
 import ResultModal from '../common/ResultModal';
 import { BiShoppingBag } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlineHighlight, AiTwotoneDelete } from 'react-icons/ai';
+import useCustomCart from '../../hocks/useCustomCart';
+import UserCustomLogin from '../../hocks/userCustomLogin';
+import { useNavigate } from 'react-router-dom';
 
 export const host = API_SERVER_HOST
 
@@ -30,6 +33,15 @@ const initState = {
 
 }
 
+const initStateChoice = {
+    no: '',
+    userId: '',
+    pdNo: '',
+    size: '',
+    color: '',
+    count: '1'
+}
+
 function PdInfoByIdComponent({ pdNo }) {
 
     const [pdInfo, setPdInfo] = useState(initState)
@@ -38,24 +50,149 @@ function PdInfoByIdComponent({ pdNo }) {
 
     const [result, setResult] = useState(null)
 
-    const [activeImg, setActiveImage] = useState()
+    const { cartItems, changeCart } = useCustomCart()
+
+    const { loginState } = UserCustomLogin()
 
     const [amount, setAmount] = useState(1);
 
-    useEffect(() => {
+    const [count, setCount] = useState(1);
 
-        console.log("ID COMPO")
-        console.log(pdNo)
+    const [choicePdInfo, setChoicePdInfo] = useState({ ...initStateChoice })
+
+    const [choicePdInfoList, setChoicePdInfoList] = useState([])
+
+    const navigate = useNavigate()
+
+
+    //상품 사이즈 
+    const sizeList = pdInfo.sizeList.map((size) => {
+        return {
+            sizeType: size.sizeType,
+        }
+    })
+
+    const changeSizeList = [
+        ...new Set(sizeList.map((size) => JSON.stringify(size))),
+    ].map((size) => JSON.parse(size))
+
+
+    //상품 색상
+    const colorList = pdInfo.sizeList.map((size) => {
+        return {
+            color: size.color,
+            colorCode: size.colorCode
+        }
+    })
+
+    const changeColorList = [
+        ...new Set(colorList.map((color) => JSON.stringify(color))),
+    ].map((color) => JSON.parse(color))
+
+
+    useEffect(() => {
         selectPdInfoByPdNo(pdNo).then(data => {
             setPdInfo(data)
         })
 
     }, [pdNo])
 
+
+    //상품 색상 선택
+    const handleColor = (color) => {
+        choicePdInfo.color = color
+        setChoicePdInfo({ ...choicePdInfo })
+    }
+
+    //상품 사이즈 선택
+    const handleSize = (size) => {
+        choicePdInfo.size = size
+
+        choicePdInfo.no = count
+        setCount(parseInt(count) + 1)
+
+        choicePdInfo.pdNo = pdInfo.pdNo
+
+        choicePdInfo.userId = loginState.userId
+        setChoicePdInfo({ ...choicePdInfo })
+    }
+
+    //상품 수량 선택
+    //마이너스
+    const handleMinusCount = (index) => {
+        choicePdInfoList[index].count = parseInt(choicePdInfoList[index].count) - 1
+        if (choicePdInfoList[index].count == 0) {
+            choicePdInfoList[index].count = 1
+        }
+        setChoicePdInfo({ ...choicePdInfo })
+    }
+
+    //플러스
+    const handlePlusCount = (index) => {
+        choicePdInfoList[index].count = parseInt(choicePdInfoList[index].count) + 1
+        setChoicePdInfo({ ...choicePdInfo })
+    }
+
+    //선택 상품 삭제
+    const handleRemoveList = (no) => {
+        const resultInfo = choicePdInfoList.filter(choicePdInfoList => choicePdInfoList.no != no)
+        console.log(resultInfo)
+        setChoicePdInfoList(resultInfo)
+    }
+
+
+    //선택한 상품 리스트 등록
+    if (!Object.is('', choicePdInfo.color) && !Object.is('', choicePdInfo.size)) {
+        setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
+        setChoicePdInfo({ ...initStateChoice })
+    }
+
+    //상품 삭제
     const handleClickRemove = () => {
         removePdInfo(pdInfo).then(data => {
             setResult("상품이 삭제 되었습니다.")
         })
+    }
+
+    //장바구니 등록
+    const handleAddCart = () => {
+
+        if(choicePdInfoList.length == 0){
+            window.confirm('선택한 상품이 없습니다.')
+            return
+        }
+
+        let count = 1
+        //const addedItem = cartItems.filter(item => item.pdNo == parseInt(pdNo) && item.color == color && item.size == size)[0]
+        // const addedItem = cartItems.filter(item => item.pdNo == parseInt(pdNo))[0]
+        // if (addedItem) {
+        //     if (window.confirm('이미 추가된 상품 입니다. 추가 하시겠습니까?') == false) {
+        //         return
+        //     }
+        //     count = addedItem.count + 1
+        // }
+
+        //장바구니 등록
+
+        const selectCartList = choicePdInfoList.map((list) => {
+            return {
+                userId: list.userId,
+                pdNo: list.pdNo,
+                size: list.size,
+                color: list.color,
+                count: list.count
+            }
+        })
+
+        const formData = new FormData()
+        const jsonPdInfo = JSON.stringify(selectCartList)
+        const cartItemDTO = new Blob([jsonPdInfo], { type: 'application/json' })
+
+        formData.append("cartItemDTO", cartItemDTO)
+
+        changeCart(formData)
+        navigate({pathname:'/user/cartPage'},{replace:true})
+
     }
 
     const closeModal = () => {
@@ -63,20 +200,20 @@ function PdInfoByIdComponent({ pdNo }) {
     }
 
     const plusMinuceButton =
-        "flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500";
+        "flex h-6 w-6 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500";
 
 
     return (
         <div>
             <section className="container flex-grow mx-auto max-w-[1200px] border-b py-5 lg:grid lg:grid-cols-2 lg:py-10">
                 {/* image gallery */}
-                <div className="container mx-0 px-3">
+                <div className="container ml-14 px-3">
                     <img src={`${host}/product/view/${pdInfo.imageList[0]}`} />
                     {/* /image gallery  */}
                 </div>
                 {/* description  */}
 
-                <div className="mx-0 px-5 lg:px-5">
+                <div className="ml-16 px-5 lg:px-5 ">
                     <h2 className="pt-3 text-2xl font-bold lg:pt-0">
                         {pdInfo.pdName}
                     </h2>
@@ -107,15 +244,20 @@ function PdInfoByIdComponent({ pdNo }) {
                     <div className="mt-6">
                         <p className="pb-2 text-xs text-gray-500">사이즈</p>
                         <div className="flex gap-1">
-                            {pdInfo.sizeList.map((size, index) => {
+                            {changeSizeList.map((size, index) => {
+
                                 return (
                                     <div
+                                        id='size'
+                                        name='size'
                                         key={index}
-                                        className="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                        onClick={() => handleSize(`${size.sizeType}`, index)}
+                                        className="flex h-10 w-10 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                     >
-                                        {size.sizeTpye}
+                                        {size.sizeType}
                                     </div>
-                                );
+                                )
+
                             })}
                         </div>
                     </div>
@@ -123,29 +265,58 @@ function PdInfoByIdComponent({ pdNo }) {
                     <div className="mt-6">
                         <p className="pb-2 text-xs text-gray-500">색  상</p>
                         <div className="flex gap-1">
-                            {pdInfo.sizeList.map((size, index) => {
+                            {changeColorList.map((size, index) => {
                                 return (
                                     <div
                                         key={index}
-                                        className={`h-8 w-8 cursor-pointer border border-white bg-${size.colorCode}-600 focus:ring-2 focus:ring-${size.colorCode}-500 active:ring-2 active:ring-${size.colorCode}-500`}
-                                    />
+                                        id='color'
+                                        name='color'
+                                        onClick={() => { handleColor(`${size.color}`, index) }}
+                                        //className={`h-10 w-10 cursor-pointer border border-white bg-${size.colorCode} focus:ring-2 focus:ring-${size.colorCode} active:ring-2 active:ring-${size.colorCode}`}
+                                        className="flex h-10 w-16 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    >
+                                        {size.color}
+                                    </div>
+
                                 );
                             })}
                         </div>
                     </div>
                     {/* 수량 */}
                     <div className="mt-6">
-                        <p className="pb-2 text-xs text-gray-500">수  량</p>
-                        <div className="flex">
-                            <button className={`${plusMinuceButton}`} onClick={() => setAmount((prev) => prev - 1)}>−</button>
-                            <div className="flex h-8 w-8 cursor-text items-center justify-center border-t border-b active:ring-gray-500">
-                                {amount}
-                            </div>
-                            <button className={`${plusMinuceButton}`} onClick={() => setAmount((prev) => prev + 1)}> +</button>
-                        </div>
+
+                        {
+                            choicePdInfoList.length > 0 ?
+                                <div>
+                                    <p className="pb-2 text-xs text-gray-500">수  량</p>
+                                    <div className="flex">
+                                        <div>
+                                            {choicePdInfoList.map((list, i) => (
+                                                <div className='grid grid-cols-10'
+                                                    key={i}>
+                                                    <p className='cursor-text items-center justify-center col-span-6' >
+                                                        {list.size} / {list.color}
+                                                    </p>
+                                                    <button className={`${plusMinuceButton}`} onClick={() => { setAmount((prev) => prev - 1); handleMinusCount(i) }}>−</button>
+                                                    <p className="flex h-6 w-6 cursor-text items-center justify-center border-t border-b active:ring-gray-500">
+                                                        {list.count}
+                                                    </p>
+                                                    <button className={`${plusMinuceButton}`} onClick={() => { setAmount((prev) => prev + 1); handlePlusCount(i) }}> +</button>
+                                                    <button className= "flex h-6 w-6 ml-2 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                                            onClick={() => handleRemoveList(`${list.no}`)}>x</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                : <></>
+                        }
+
                     </div>
                     <div className="mt-7 flex flex-row items-center gap-6">
-                        <button className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-blue-800">
+                        <button
+                            onClick={() => handleAddCart()}
+                            className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-blue-800">
                             <BiShoppingBag className="mx-2" />
                             Add to cart
                         </button>
@@ -154,20 +325,20 @@ function PdInfoByIdComponent({ pdNo }) {
                             Wishlist
                         </button>
                     </div>
-                        <div className="mt-7 flex flex-row items-center gap-6">
-                            <button
-                                onClick={() => modifyPage(pdInfo)}
-                                className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-gray-700">
-                                <AiOutlineHighlight className="mx-2" />
-                                수  정
-                            </button>
-                            <button
-                                onClick={handleClickRemove}
-                                className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-gray-400">
-                                <AiTwotoneDelete className="mx-2" />
-                                삭  제
-                            </button>
-                        </div>
+                    <div className="mt-7 flex flex-row items-center gap-6">
+                        <button
+                            onClick={() => modifyPage(pdInfo)}
+                            className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-gray-700">
+                            <AiOutlineHighlight className="mx-2" />
+                            수  정
+                        </button>
+                        <button
+                            onClick={handleClickRemove}
+                            className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-gray-400">
+                            <AiTwotoneDelete className="mx-2" />
+                            삭  제
+                        </button>
+                    </div>
                 </div>
             </section>
 

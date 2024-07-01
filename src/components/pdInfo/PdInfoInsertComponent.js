@@ -79,6 +79,7 @@ function PdInfoInsertComponent() {
 
     const addSize = (s) => {
         setSizeList([...addSizeList, s])
+        console.log(addSizeList)
     }
 
     //사이즈 삭제
