@@ -10,13 +10,13 @@ import SizeComponet from '../common/SizeComponet';
 import SizeInfoComponet from '../common/SizeInfoComponet';
 
 const initState = {
-    brandNo: 2,
+    brandNo: 4,
     categoryNo: 1,
     itemNo: 1,
     pdNo: '',
     startDate: '',
     pdName: '',
-    brandNm: '엘무드',
+    brandNm: '자라',
     endDate: '',
     buyAmt: 0,
     likeCnt: '',
@@ -34,8 +34,6 @@ function PdInfoInsertComponent() {
     const uploadRef = useRef()
 
     const [result, setResult] = useState(null)
-
-    const [pdNo, setPdNo] = useState(null)
 
     const [categoryList, setCategoryList] = useState([])
 
@@ -113,16 +111,11 @@ function PdInfoInsertComponent() {
         formData.append("pdInfo", pdInfoDTO)
 
         insertPdInfo(formData).then(data => {
-            setFetching(false)
-            setResult(data.pdNo)
-            setPdNo(data.pdNo)
+            window.confirm('상품 등록을 완료 했습니다.')
+            //movePagePdInfo(data.pdNo)
         })
-    }
 
-    //Modal
-    const closeModal = () => {
-        setResult(null)
-        //movePagePdInfo(pdNo)
+        
     }
 
     const textTpyeClass = 'text-base text-gray-500 font-semibold mb-2 block'
@@ -140,7 +133,7 @@ function PdInfoInsertComponent() {
                 <div className="border-b border-gray-900/10 pb-12">
                     <label class="text-base text-gray-500 font-semibold mb-2 block">상품 등록</label>
                     {/* <h2 className="text-base font-semibold leading-7 text-gray-900">상품 등록</h2> */}
-                    <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">This is the page where the product is registered.</p>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                         {/* 브랜드 */}
@@ -154,7 +147,7 @@ function PdInfoInsertComponent() {
                                     name="brandNm"
                                     id="brandNm"
                                     //value={pdInfo.brandNm}
-                                    value={'엘무드'}
+                                    value={'자라'}
                                     onChange={handleChangePdInfo}
                                     className='block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none sm:text-sm sm:leading-6 bg-gray-100'
                                     readOnly
@@ -178,7 +171,7 @@ function PdInfoInsertComponent() {
                                     className={`${selectClass}`}
                                 >
                                     <option value={"선택하세요"}>선택하세요</option>
-                                    {categoryList.map((category) => (
+                                    {categoryList && categoryList.map((category) => (
                                         <option value={category.categoryNo} >{category.categoryNm}</option>
                                     ))}
                                 </select>
@@ -314,16 +307,18 @@ function PdInfoInsertComponent() {
                 </div>
 
                 {/* 버튼 */}
-                <div className={textTpyeClass}>
-                    <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-                        Cancel
+
+                <div className="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="button"
+                        className="rounded-md bg-gray-400 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">
+                        취소
                     </button>
                     <button
                         type="button"
                         onClick={insertProduckButtonClick}
-                        className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+                        className="rounded-md bg-gray-900 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
                     >
-                        Save
+                        저장
                     </button>
                 </div>
             </div>
@@ -333,11 +328,6 @@ function PdInfoInsertComponent() {
             {/* 로딩 */}
             {fetching ? <FetchingModal /> : <></>}
 
-            {/* 성공 모달 */}
-            {result ? <ResultModal
-                content={`상품이 등록 되었습니다.`}
-                callbackFn={closeModal}
-            /> : <></>}
         </div>
     );
 }

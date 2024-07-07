@@ -55,7 +55,7 @@ function SideMenu() {
                             <ListItem className="p-0" selected={open === index}>
                                 <AccordionHeader onClick={() => handleOpen(index)} className="border-b-0 p-3">
                                     <div className="flex items-center justify-between pb-1">
-                                        <h3 className=" border-b-[#F0F0F0] pb-0.5 flex items-center gap- hover:text-primeColor duration-300">
+                                        <h3 className="text-xs text-gray-900  whitespace-normal">
                                             {category.categoryNm}
                                         </h3>
                                     </div>
@@ -70,7 +70,7 @@ function SideMenu() {
                                                 <ul className="text-xs lg:text-base text-[#767676] "
                                                     onClick={() => pageList({ categoryNo: category.categoryNo, itemNo: item.itemNo })}
                                                 >
-                                                    <li className="border-b-[#F0F0F0] pb-2 items-center hover:text-primeColor hover:border-gray-400 duration-300">
+                                                    <li className="text-xs text-gray-400  whitespace-normal">
                                                         {item.itemNm}
                                                     </li>
                                                 </ul>

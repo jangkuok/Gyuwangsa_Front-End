@@ -9,7 +9,7 @@ function HeaderNavbar() {
 
   const loginState = useSelector(state => state.loginSlice)
 
-  const { doLogout,moveToPath } = UserCustomLogin()
+  const { doLogout, moveToPath } = UserCustomLogin()
 
   const dispatch = useDispatch()
 
@@ -29,6 +29,9 @@ function HeaderNavbar() {
           </Link>
           {loginState.userId ?
             <div>
+              <Link to="/brand/brandAddPage" className="text-white mr-3">
+                브랜드 가입
+              </Link>
               <Link to="/user/myPage" className="text-white mr-3">
                 마이페이지
               </Link>
@@ -38,9 +41,14 @@ function HeaderNavbar() {
               <a onClick={logoutButton} className="text-white">로그아웃</a>
             </div>
             :
-            <Link to="/loginPage" className="text-white mr-3">
-              로그인
-            </Link>
+            <div>
+              <Link to="/brand/brandAddPage" className="text-white mr-3">
+                브랜드 가입
+              </Link>
+              <Link to="/loginPage" className="text-white mr-3">
+                로그인
+              </Link>
+            </div>
           }
         </div>
       </nav>

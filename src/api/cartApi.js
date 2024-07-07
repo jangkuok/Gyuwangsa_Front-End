@@ -13,7 +13,6 @@ export const postChangeCart = async (cartItem) => {
     
     const header = { header: { 'Content-Tpye': 'multipart/form-data' } }
     const res = await jwtAxios.post(`${host}/changeCart`,cartItem,header)
-    //const res = await jwtAxios.post(`${host}/changeCart`,cartItem)
 
     return res.data
 }

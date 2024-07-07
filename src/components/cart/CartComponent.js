@@ -3,10 +3,11 @@ import UserCustomLogin from '../../hocks/userCustomLogin';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCartItemsAsync } from '../../slices/cartSlice';
 import { ImCross } from 'react-icons/im';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import useCustomCart from '../../hocks/useCustomCart';
 import { host } from '../pdInfo/PdInfoByIdComponent';
+import { orderPageLoad } from '../../api/orderApi';
 
 function CartComponent(props) {
 
@@ -14,155 +15,127 @@ function CartComponent(props) {
 
   const { cartItems, refreshCart, changeCartPage } = useCustomCart()
 
-  const [totalAmt, setTotalAmt] = useState("");
+  const [deliAmt, setDeliAmt] = useState(0)
 
-  const [shippingCharge, setShippingCharge] = useState("");
+  const [totalAmt, setTotalAmt] = useState(0)
+
+  const [sum, setSum] = useState(0)
+
+  const navigate = useNavigate()
+
+  //체크 박스 이벤트
+  const [checkedList, setCheckedList] = useState([])
+
+  const onCheckedElement = (checked, item) => {
+    if (checked) {
+      setCheckedList([...checkedList, item])
+    } else if (!checked) {
+      setCheckedList(checkedList.filter(el => el !== item))
+    }
+  }
+
+  //주문 페이지 이동
+  const onClickOrderPage = () => {
+    if (checkedList.length == 0) {
+      window.confirm('선택한 상품이 없습니다.')
+      return
+    }
+    navigate({ pathname: '/order/orderPage' }, { state: checkedList })
+  }
 
 
+  //상품 상태 변경 시
   useEffect(() => {
     if (isLogin) {
       refreshCart()
     }
   }, [isLogin])
 
-  useEffect(() => {
-    if (totalAmt <= 200) {
-      setShippingCharge(30);
-    } else if (totalAmt <= 400) {
-      setShippingCharge(25);
-    } else if (totalAmt > 401) {
-      setShippingCharge(20);
-    }
-  }, [totalAmt]);
 
   const handleClickCount = (cartItemNo, pdNo, amount) => {
-    console.log(amount)
     changeCartPage({ userId: loginState.userId, cartItemNo: cartItemNo, pdNo: pdNo, count: amount })
   }
 
-  return (
 
-    <div className="w-full mt-2 mdl:w-[80%] lgl:w-[80%] h-full flex flex-col gap-10">
-      <p className="mt-4 text-4xl font-bold">
-        장바구니
-      </p>
-      {cartItems.length > 0 ? (
-        <div className="pb-20">
-          <div className="w-full h-20 bg-[#F5F7F7] text-primeColor grid grid-cols-5 place-content-center px-6 text-lg font-titleFont font-semibold">
-            <h2 className="col-span-2">상 품</h2>
-            <h2>가 격</h2>
-            <h2>수 량</h2>
-            <h2>합 계</h2>
-          </div>
-          <div className="mt-5">
+  useEffect(() => {
+    if (totalAmt < 50000) {
+      setDeliAmt(3000);
+    } else if (totalAmt > 50000) {
+      setDeliAmt(0);
+    } 
+  }, [totalAmt]);
+
+
+  return (
+    <div className="h-screen pt-20">
+      <h1 className="mb-10 text-2xl font-bold">장바구니</h1>
+      <div className=" space-y-5 max-w-4xl px-4 sm:px-6 lg:max-w-7xl lg:px-5">
+        <div className="border-b border-gray-900/10 pb-8 p">
+          <div className="rounded-lg md:w-full">
             {cartItems.map((item) => (
               <div key={item.cartItemNo}>
-                <div className="w-full grid grid-cols-5 mb-4 border py-2">
-                  <div className="flex col-span-5 mdl:col-span-2 items-center gap-4 ml-4">
-                    <ImCross
-                      onClick={''}
-                      className="text-primeColor hover:text-red-500 duration-300 cursor-pointer"
-                    />
-                    <img className="w-32 h-32" src={`${host}/product/view/s_${item.imageFile}`} alt="productImage" />
-                    <h1 className="font-titleFont font-semibold whitespace-pre-wrap">{item.pdName}</h1>
-                    <p className='text-x text-gray-400  whitespace-normal'>색상 : {item.color}</p>
-                    <p className='text-x text-gray-400  whitespace-normal'>사이즈 : {item.color}</p>
-                  </div>
-                  <div className="col-span-5 mdl:col-span-3 flex items-center justify-between py-4 mdl:py-0 px-4 mdl:px-0 gap-6 mdl:gap-0">
-                    <div className="flex w-1/3 items-center text-lg font-semibold">
-                      \{item.buyAmt}
+                <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+                  <input className='w-6 h-6 mr-2' type='checkbox'
+                    id={item.cartItemNo}
+                    value={item.cartItemNo}
+                    onChange={e => { onCheckedElement(e.target.checked, e.target.value) }}
+                  />
+                  <Link to={`/product/info/${item.pdNo}`}>
+                    <img className="w-32 h-32" src={`${host}/product/view/s_${item.imageFile}`} alt="productImage" class="w-full rounded-lg sm:w-40" />
+                  </Link>
+                  <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+                    <div className="mt-5 sm:mt-0">
+                      <Link to={`/product/info/${item.pdNo}`}>
+                        <h2 className="text-lg font-bold text-gray-900">{item.pdName}</h2>
+                      </Link>
+                      <p className="text-x text-gray-400  whitespace-normal">[{item.brandNm}] 색상 : {item.color} / 사이즈 : {item.size}</p>
                     </div>
-                    <div className="w-1/3 flex items-center gap-6 text-lg">
-                      <span
-                        onClick={() => handleClickCount(`${item.cartItemNo}`, `${item.pdNo}`, parseInt(`${item.count}`) - 1)}
-                        className="w-6 h-6 bg-gray-100 text-2xl flex items-center justify-center hover:bg-gray-300 cursor-pointer duration-300 border-[1px] border-gray-300 hover:border-gray-300"
-                      >
-                        -
-                      </span>
-                      <p>{item.count}</p>
-                      <span
-                        onClick={() => handleClickCount(`${item.cartItemNo}`, `${item.pdNo}`, parseInt(`${item.count}`) + 1)}
-                        className="w-6 h-6 bg-gray-100 text-2xl flex items-center justify-center hover:bg-gray-300 cursor-pointer duration-300 border-[1px] border-gray-300 hover:border-gray-300"
-                      >
-                        +
-                      </span>
-                    </div>
-                    <div className="w-1/3 flex items-center font-titleFont font-bold text-lg">
-                      <p>\{item.count * item.buyAmt}</p>
+                    <div className="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                      <div className="flex items-center border-gray-100">
+                        <span
+                          onClick={() => handleClickCount(`${item.cartItemNo}`, `${item.pdNo}`, parseInt(`${item.count}`) - 1)}
+                          className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-gray-900 hover:text-blue-50"> - </span>
+                        <p className='h-7 w-7 text-center'>{item.count}</p>
+                        <span
+                          onClick={() => handleClickCount(`${item.cartItemNo}`, `${item.pdNo}`, parseInt(`${item.count}`) + 1)}
+                          className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-gray-900 hover:text-blue-50"> + </span>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <p className="text-lg">\ {(item.buyAmt * item.count).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-
-  
-
-          <div className="max-w-7xl gap-4 flex justify-end mt-4">
-            <div className="w-96 flex flex-col gap-4">
-              <h1 className="text-2xl font-semibold text-right">Cart totals</h1>
-              <div>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Subtotal
-                  <span className="font-semibold tracking-wide font-titleFont">
-                    ${totalAmt}
-                  </span>
-                </p>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Shipping Charge
-                  <span className="font-semibold tracking-wide font-titleFont">
-                    ${shippingCharge}
-                  </span>
-                </p>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 py-1.5 text-lg px-4 font-medium">
-                  Total
-                  <span className="font-bold tracking-wide text-lg font-titleFont">
-                    ${totalAmt + shippingCharge}
-                  </span>
-                </p>
-              </div>
-              <div className="flex justify-end">
-                <Link to="/paymentgateway">
-                  <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-                    Proceed to Checkout
-                  </button>
-                </Link>
-              </div>
-            </div>
+        </div>
+      </div>
+      <div className="rounded-lg border bg-white  max-w-4xl px-4 py-16 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-5 mt-14 ">
+        <div className="mb-2 flex justify-between">
+          <p className="text-gray-700">상 품 가 격</p>
+          <p className="text-gray-700">\ 129.99</p>
+        </div>
+        <div className="flex justify-between">
+          <p className="text-gray-700">배 송 비</p>
+          <p className="text-gray-700">\ {deliAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+        </div>
+        <hr className="my-4" />
+        <div className="flex justify-between">
+          <p className="text-lg font-bold">Total</p>
+          <div className="">
+            <p className="mb-1 text-lg font-bold">\ {(totalAmt + deliAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
           </div>
         </div>
-      ) : (
-        // <motion.div
-        //   initial={{ y: 30, opacity: 0 }}
-        //   animate={{ y: 0, opacity: 1 }}
-        //   transition={{ duration: 0.4 }}
-        //   className="flex flex-col mdl:flex-row justify-center items-center gap-4 pb-20"
-        // >
-        //   <div>
-        //     <img
-        //       className="w-80 rounded-lg p-4 mx-auto"
-        //       src={emptyCart}
-        //       alt="emptyCart"
-        //     />
-        //   </div>
-        //   <div className="max-w-[500px] p-4 py-8 bg-white flex gap-4 flex-col items-center rounded-md shadow-lg">
-        //     <h1 className="font-titleFont text-xl font-bold uppercase">
-        //       Your Cart feels lonely.
-        //     </h1>
-        //     <p className="text-sm text-center px-10 -mt-2">
-        //       Your Shopping cart lives to serve. Give it purpose - fill it with
-        //       books, electronics, videos, etc. and make it happy.
-        //     </p>
-        //     <Link to="/shop">
-        //       <button className="bg-primeColor rounded-md cursor-pointer hover:bg-black active:bg-gray-900 px-8 py-2 font-titleFont font-semibold text-lg text-gray-200 hover:text-white duration-300">
-        //         Continue Shopping
-        //       </button>
-        //     </Link>
-        //   </div>
-        // </motion.div>
-        <></>
-      )}
-    </div>
+        <button
+          onClick={() => { onClickOrderPage() }}
+          className="mt-6 w-full rounded-md bg-gray-900 py-1.5 font-medium text-blue-50 hover:bg-gray-600">주문하기</button>
+      </div>
+    </div >
+
   );
 }
 

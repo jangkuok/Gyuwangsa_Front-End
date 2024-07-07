@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login, loginPostAsync } from '../../slices/loginSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import userCustomLogin from '../../hocks/userCustomLogin';
 import { getKakaoLoginLink } from '../../api/kakaoApi';
 
@@ -48,22 +46,22 @@ function LoginComponent(props) {
     }
 
     const joinPage = () => {
-        moveToPath("/userJoinPage")
+        moveToPath("/userBrandSelectPage")
     }
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                    GYUWANGSA
-                </h2>
-            </div>
+        <div className="flex  flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                        GYUWANGSA
+                    </h2>
+                </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <div>
                     <label htmlFor="userId" className={textTpyeClass}>
                         아이디
                     </label>
-                    <div className="mt-2">
+                    <div className="mt-2 mb-5">
                         <input
                             id="userId"
                             name="userId"
@@ -81,7 +79,7 @@ function LoginComponent(props) {
                             비밀번호
                         </label>
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-2 mb-5">
                         <input
                             id="pwd"
                             name="pwd"
@@ -96,14 +94,14 @@ function LoginComponent(props) {
                 <div>
                     <button
                         type="submit"
-                        className="flex w-full h-10 justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="mb-3 flex w-full h-10 justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         onClick={loginButton}
                     >
                         로  그  인
                     </button>
                     <button
                         type="submit"
-                        className="flex w-full h-10 justify-center rounded-md bg-yellow-400 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-yellow-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="mb-3 flex w-full h-10 justify-center rounded-md bg-yellow-400 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-yellow-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                         <Link to={link}>카카오 로그인</Link>
 
@@ -115,6 +113,13 @@ function LoginComponent(props) {
                     >
                         회원가입
                     </button>
+                </div>
+                <div className='justify-center'>
+                    <Link to="/userFindPage" >
+                        <p className="text-center mt-6 text-xs leading-5 text-gray-600">
+                            아이디 찾기 / 비밀번호 찾기
+                        </p>
+                    </Link>
                 </div>
             </div>
         </div>

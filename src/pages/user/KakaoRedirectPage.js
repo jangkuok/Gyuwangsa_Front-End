@@ -22,11 +22,11 @@ function KakaoRedirectPage(props) {
             console.log("access : " + accessToken)
             getUserWithAccessToken(accessToken).then(user =>{
                 dispatch(login(user))
-                // if(user && user.note == '정보 수정 필요'){
-                //     moveToPath("/user/modifyPage")
-                // }else{
-                //     window.location.replace("/")
-                // }
+                if(user && user.note == '정보 수정 필요'){
+                    moveToPath("/user/modifyPage")
+                }else{
+                    window.location.replace("/")
+                }
             })
         })
 

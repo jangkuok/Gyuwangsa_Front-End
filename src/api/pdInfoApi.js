@@ -31,7 +31,7 @@ export const selectListByPdInfo = async (pageParam) => {
 export const insertPdInfo = async (pdInfo) => {
     const header = { header: { 'Content-Tpye': 'multipart/form-data' } }
     //const res = await axios.post(`${prefix}/insertPdInfo`, pdInfo, header)
-    const res = await axios.post(`${prefix}/insertPdInfo`, pdInfo, header)
+    const res = await jwtAxios.post(`${prefix}/insertPdInfo`, pdInfo, header)
     return res.data
 }
 

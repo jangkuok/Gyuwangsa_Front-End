@@ -2,6 +2,9 @@
 import {Suspense, lazy} from "react";
 import productRouter from "./productRouter";
 import userRouter from "./userRouter";
+import orderRouter from "./orderRouter";
+import brandRouter from "./brandRouter";
+
 const {createBrowserRouter} = require("react-router-dom")
 
 const Loading = <div>Loading........</div>
@@ -17,6 +20,12 @@ const root = createBrowserRouter([
     },
     {
         children:userRouter()
+    },
+    {
+        children:orderRouter()
+    },
+    {
+        children:brandRouter()
     },
 
 

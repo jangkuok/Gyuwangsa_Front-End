@@ -19,12 +19,35 @@ export const loginPost = async(loginParam) => {
 
 export const joinUserInfo = async(user) => {
     const res = await axios.post(`${host}/userJoin`,user)
+    return res.data
+}
 
+export const joinBrandUserInfo = async(formData) => {
+    const header = { header: { 'Content-Tpye': 'multipart/form-data' } }
+    const res = await axios.post(`${host}/brandUserJoin`,formData,header)
     return res.data
 }
 
 export const modifyUserInfo = async(user) => {
     const res = await axios.put(`${host}/modify`,user)
+
+    return res.data
+}
+
+export const selectUserInfo = async(userId) => {
+    const res = await axios.get(`${host}/info/${userId}`)
+
+    return res.data
+}
+
+export const selectMemberFindUserID = async(name,email) => {
+    const res = await axios.get(`${host}/find/${name}/${email}`)
+
+    return res.data
+}
+
+export const modifyMemberChangePassword = async(user) => {
+    const res = await axios.put(`${host}/modifyPassword`,user)
 
     return res.data
 }

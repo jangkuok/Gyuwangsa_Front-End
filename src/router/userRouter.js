@@ -8,6 +8,8 @@ const KakaoRedirectPage = lazy(() => import("../pages/user/KakaoRedirectPage"))
 const ModifyPage = lazy(() => import("../pages/user/UserModifyInfoPage"))
 const UserJoinPage  = lazy(() => import("../pages/user/UserJoinPage"))
 const CartPage  = lazy(() => import("../pages/cart/CartPage"))
+const UserBrandSelectPage  = lazy(() => import("../pages/user/UserBrandSelectPage"))
+const UserFindPage  = lazy(() => import("../pages/user/UserFindPage"))
 
 const userRouter = () => {
 
@@ -37,6 +39,16 @@ const userRouter = () => {
             path: 'user/cartPage',
             element:<Suspense fallback={Loading}><CartPage/></Suspense>
         },
+        {
+            path: 'userBrandSelectPage',
+            element:<Suspense fallback={Loading}><UserBrandSelectPage/></Suspense>
+        },
+        {
+            path: 'userFindPage',
+            element:<Suspense fallback={Loading}><UserFindPage/></Suspense>
+        },
+        
+        
 
    ]
 }

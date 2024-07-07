@@ -185,8 +185,8 @@ function PdInfoByIdComponent({ pdNo }) {
         })
 
         const formData = new FormData()
-        const jsonPdInfo = JSON.stringify(selectCartList)
-        const cartItemDTO = new Blob([jsonPdInfo], { type: 'application/json' })
+        const jsonCart = JSON.stringify(selectCartList)
+        const cartItemDTO = new Blob([jsonCart], { type: 'application/json' })
 
         formData.append("cartItemDTO", cartItemDTO)
 
@@ -342,7 +342,7 @@ function PdInfoByIdComponent({ pdNo }) {
                 </div>
             </section>
 
-            <span className=' text-gray-700 font-semibold '>Info</span>
+            <span className=' text-gray-700 font-semibold  '>Info</span>
 
             <div className='w-full justify-center flex flex-col m-auto items-center'>
                 {pdInfo.imageList.map((fileNm, i) =>

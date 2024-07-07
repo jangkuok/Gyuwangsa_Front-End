@@ -38,63 +38,6 @@ function PdInfoListComponent() {
   }, [categoryNo, itemNo, page, size, refresh])
 
   return (
-    // <div className="w-full grid grid-cols-5 gap-5">
-    //   {/* {fetching ? <FetchingModal/>:<></>} */}
-    //   {pdIndfoList.dtoList.map((pdInfo) => (
-    //     <div className="w-full relative group">
-    //       <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
-    //         <div onClick={() => movePagePdInfo(pdInfo.pdNo)}>
-    //           <img className="w-full h-full" src={`${host}/product/view/s_${pdInfo.imageList[0]}`} />
-    //         </div>
-    //       </div>
-    //       <div className="max-w-80 py-6 flex flex-col gap-1 border-[1px] border-t-0 px-4">
-    //         <div className="flex items-center justify-between font-titleFont">
-    //           <h2 className="text-lg text-primeColor font-bold">
-    //             {pdInfo.pdName}
-    //           </h2>
-    //           <p className="text-[#767676] text-[14px]">\{pdInfo.buyAmt}</p>
-    //         </div>
-    //         <div>
-    //           <p className="text-[#767676] text-[14px]">샘플{pdInfo.pdNo}</p>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   ))}
-    //   <div>
-    //     <PageComponent pdIndfoList={pdIndfoList} movePage={pageList} categoryNo={categoryNo} itemNo={itemNo}/>
-    //   </div>
-    // </div>
-
-    // <div className="bg-white">
-    //   <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-    //     <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-3">
-    //       {/* {fetching ? <FetchingModal/>:<></>} */}
-    //       {pdIndfoList.dtoList.map((pdInfo) => (
-    //         <div className="w-full relative group">
-    //           <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
-    //             <div onClick={() => movePagePdInfo(pdInfo.pdNo)}>
-    //               <img className="w-full h-full" src={`${host}/product/view/${pdInfo.imageList[0]}`} />
-    //             </div>
-    //           </div>
-    //           <div className="max-w-80 py-6 flex flex-col gap-1 border-[1px] border-t-0 px-4">
-    //             <p className="text-[#767676] text-[14px]">{pdInfo.brandNm}</p>
-    //             <div className="flex items-center justify-between font-titleFont">
-    //               <h2 className="text-lg text-primeColor font-bold">
-    //                 {pdInfo.pdName}
-    //               </h2>
-    //             </div>
-    //             <div>
-    //               <p className="text-[#767676] text-[14px]">\{pdInfo.buyAmt}</p>
-    //               <p className="text-[#767676] text-[14px]">{pdInfo.likeCnt}</p>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       ))}
-    //     </div>
-    //   </div>
-    //   <div>
-    //     <PageComponent pdIndfoList={pdIndfoList} movePage={pageList} categoryNo={categoryNo} itemNo={itemNo} />
-    //   </div>
 
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-1 lg:max-w-7xl lg:px-8">
@@ -109,7 +52,7 @@ function PdInfoListComponent() {
               </div>
 
               <div className="p-2">
-                <p className="text-[#767676] text-[14px]">{pdInfo.brandNm}</p>
+                <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
                 <h3 className="text-lg font-bold text-gray-800">{pdInfo.pdName}</h3>
                 <div className="mt-4 flex items-center flex-wrap gap-2">
                   <h4 className="text-lg font-bold text-gray-800">\{}{pdInfo.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
