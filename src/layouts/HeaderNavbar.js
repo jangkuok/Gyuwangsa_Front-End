@@ -29,8 +29,8 @@ function HeaderNavbar() {
           </Link>
           {loginState.userId ?
             <div>
-              <Link to="/brand/brandAddPage" className="text-white mr-3">
-                브랜드 가입
+              <Link to="/brand/brandList" className="text-white mr-3">
+                브랜드
               </Link>
               <Link to="/user/myPage" className="text-white mr-3">
                 마이페이지
@@ -44,6 +44,9 @@ function HeaderNavbar() {
             <div>
               <Link to="/brand/brandAddPage" className="text-white mr-3">
                 브랜드 가입
+              </Link>
+              <Link to="/brand/brandList" className="text-white mr-3">
+                브랜드
               </Link>
               <Link to="/loginPage" className="text-white mr-3">
                 로그인

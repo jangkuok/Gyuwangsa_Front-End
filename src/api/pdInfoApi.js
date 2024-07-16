@@ -1,5 +1,8 @@
 import axios from "axios"
 import jwtAxios from "../util/jwtUtil"
+import UserCustomLogin from "../hocks/userCustomLogin"
+import { getCookie } from "../util/cookieUtil"
+import { useSelector } from "react-redux"
 
 export const API_SERVER_HOST = 'http://localhost:8080'
 
@@ -8,23 +11,13 @@ const prefix = `${API_SERVER_HOST}/product`
 
 export const selectPdInfoByPdNo = async (pdNo) => {
     //const res = await axios.get(`${prefix}/info/${pdNo}`)
-    const res = await jwtAxios.get(`${prefix}/info/${pdNo}`)
+    const res = await axios.get(`${prefix}/info/${pdNo}`)
     return res.data
 }
 
-// export const selectListByPdInfo = async (pageParam) => {
-//     const {page, size, categoryNo, itemNo} = pageParam
-//     console.log('api')
-//     console.log(page, size, categoryNo, itemNo)
-//     const res = await axios.get(`${prefix}/item/{${categoryNo}}/${itemNo}`,{params:{page,size}}) 
-//     return res.data
-// }
-
-//export const selectListByPdInfo = async ({categoryNo,itemNo},pageParam) => {
-
 export const selectListByPdInfo = async (pageParam) => {
-    const { categoryNo, itemNo, page, size } = pageParam
-    const res = await axios.get(`${prefix}/item/${categoryNo}/${itemNo}`, { params: { page, size } })
+    const { categoryNo, itemNo, page, size, userId } = pageParam
+    const res = await axios.get(`${prefix}/item/${categoryNo}/${itemNo}`, {params: { userId, page, size }})
     return res.data
 }
 
@@ -43,7 +36,11 @@ export const modifyPdInfo = async (pdInfo, pdNo) => {
 }
 
 export const removePdInfo = async (pdInfo) => {
-    //const res = await axios.delete(`${prefix}/remove/${pdInfo.brandNo}/${pdInfo.categoryNo}/${pdInfo.itemNo}/${pdInfo.pdNo}`, pdInfo)
-    const res = await jwtAxios.delete(`${prefix}/remove/${pdInfo.brandNo}/${pdInfo.categoryNo}/${pdInfo.itemNo}/${pdInfo.pdNo}`, pdInfo)
+    const res = await jwtAxios.delete(`${prefix}/remove/${pdInfo.pdNo}`)
+    return res.data
+}
+
+export const selectPdInfoByKeyword = async (keyword,page,size,userId) => {
+    const res = await axios.get(`${prefix}/search/${keyword}`,{ params: { userId, page, size }})
     return res.data
 }

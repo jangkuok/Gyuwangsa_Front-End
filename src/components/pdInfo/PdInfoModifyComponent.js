@@ -5,6 +5,7 @@ import PageCustomMove from '../../hocks/pageCustomMove';
 import ResultModal from '../common/ResultModal';
 import SizeComponet from '../common/SizeComponet';
 import SizeInfoComponet from '../common/SizeInfoComponet';
+import SizeModifyComponet from '../common/SizeModifyComponet';
 
 
 export const host = API_SERVER_HOST
@@ -54,8 +55,6 @@ function PdInfoModifyComponent({ pdNo }) {
         setPdInfo({ ...pdInfo })
 
     }
-
-
 
     //이미지 삭제
     const deleteOldImageName = (imageName) => {
@@ -198,7 +197,7 @@ function PdInfoModifyComponent({ pdNo }) {
                     </div>
                     {/* 등록한 사이즈 */}
                     <div>
-                        <SizeInfoComponet categoryNo={`${pdInfo.categoryNo}`} addSizeList={addSizeList} deleteSizeList={deleteSizeList} />
+                    <SizeInfoComponet categoryNo={`${pdInfo.categoryNo}`} addSizeList={addSizeList} deleteSizeList={deleteSizeList} />
                     </div>
                     {/* 사이드 등록  */}
                     <SizeComponet categoryNo={`${pdInfo.categoryNo}`} addSize={addSize} />

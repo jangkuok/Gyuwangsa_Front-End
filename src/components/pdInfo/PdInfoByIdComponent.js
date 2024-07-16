@@ -10,6 +10,8 @@ import { AiOutlineHeart, AiOutlineHighlight, AiTwotoneDelete } from 'react-icons
 import useCustomCart from '../../hocks/useCustomCart';
 import UserCustomLogin from '../../hocks/userCustomLogin';
 import { useNavigate } from 'react-router-dom';
+import { selectBrandNo } from '../../api/brandApi';
+import PdInfoSizeComponent from './PdInfoSizeComponent';
 
 export const host = API_SERVER_HOST
 
@@ -42,9 +44,29 @@ const initStateChoice = {
     count: '1'
 }
 
+const initStateBrand = {
+    brandNo: '',
+    brandNm: '',
+    engNm: '',
+    brandLog: '',
+    brandMainImage: '',
+    addrNo: '',
+    addr: '',
+    addrDtl: '',
+    comCall: '',
+    comEmail: '',
+    deliComp: '',
+    stateCd: '',
+    startDate: '',
+    endDate: '',
+    note: '',
+}
+
 function PdInfoByIdComponent({ pdNo }) {
 
     const [pdInfo, setPdInfo] = useState(initState)
+
+    const [brand, setBrand] = useState(initState)
 
     const { pageList, modifyPage } = PageCustomMove()
 
@@ -94,6 +116,7 @@ function PdInfoByIdComponent({ pdNo }) {
         selectPdInfoByPdNo(pdNo).then(data => {
             setPdInfo(data)
         })
+
 
     }, [pdNo])
 
@@ -150,18 +173,23 @@ function PdInfoByIdComponent({ pdNo }) {
     //상품 삭제
     const handleClickRemove = () => {
         removePdInfo(pdInfo).then(data => {
-            setResult("상품이 삭제 되었습니다.")
+            window.confirm("상품이 삭제 되었습니다.")
+            navigate({ pathname: '/' }, { replace: true })
         })
     }
 
     //장바구니 등록
     const handleAddCart = () => {
 
-        if(choicePdInfoList.length == 0){
+        if (choicePdInfoList.length == 0 ) {
             window.confirm('선택한 상품이 없습니다.')
             return
         }
-
+        if (loginState.userId == '' ) {
+            window.confirm('로그인이 필요합니다.')
+            return
+        }
+        
         let count = 1
         //const addedItem = cartItems.filter(item => item.pdNo == parseInt(pdNo) && item.color == color && item.size == size)[0]
         // const addedItem = cartItems.filter(item => item.pdNo == parseInt(pdNo))[0]
@@ -191,7 +219,7 @@ function PdInfoByIdComponent({ pdNo }) {
         formData.append("cartItemDTO", cartItemDTO)
 
         changeCart(formData)
-        navigate({pathname:'/user/cartPage'},{replace:true})
+        navigate({ pathname: '/user/cartPage' }, { replace: true })
 
     }
 
@@ -302,8 +330,8 @@ function PdInfoByIdComponent({ pdNo }) {
                                                         {list.count}
                                                     </p>
                                                     <button className={`${plusMinuceButton}`} onClick={() => { setAmount((prev) => prev + 1); handlePlusCount(i) }}> +</button>
-                                                    <button className= "flex h-6 w-6 ml-2 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                                            onClick={() => handleRemoveList(`${list.no}`)}>x</button>
+                                                    <button className="flex h-6 w-6 ml-2 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                                        onClick={() => handleRemoveList(`${list.no}`)}>x</button>
                                                 </div>
                                             ))}
                                         </div>
@@ -345,6 +373,9 @@ function PdInfoByIdComponent({ pdNo }) {
             <span className=' text-gray-700 font-semibold  '>Info</span>
 
             <div className='w-full justify-center flex flex-col m-auto items-center'>
+
+                <PdInfoSizeComponent sizeList={pdInfo.sizeList} categoryNo={pdInfo.categoryNo}/>
+
                 {pdInfo.imageList.map((fileNm, i) =>
                     <img src={`${host}/product/view/${fileNm}`}
                         alt="pdInfo"

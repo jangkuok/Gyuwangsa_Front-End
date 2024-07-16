@@ -1,4 +1,3 @@
-import { collapse, input } from '@material-tailwind/react';
 import React, { useState } from 'react';
 
 const initState = {
@@ -16,8 +15,8 @@ const initState = {
     colorCode: '',
     sizeCnt: '',
 }
-function SizeComponet({ categoryNo, addSize }) {
 
+function SizeModifyComponet({ categoryNo, addSize, addSizeList, deleteSizeList }) {
     const [size, setSize] = useState({ ...initState });
 
     const [no, setNo] = useState(1)
@@ -63,6 +62,7 @@ function SizeComponet({ categoryNo, addSize }) {
     return (
         <div>
             {/* 상의 */}
+            {addSizeList.map}
             {Object.is(categoryNo, '1') ?
                 <div>
                     <div className="grid grid-cols-7 gap-1">
@@ -364,8 +364,7 @@ function SizeComponet({ categoryNo, addSize }) {
                     : <></>
             }
         </div >
-
     );
 }
 
-export default SizeComponet;
+export default SizeModifyComponet;

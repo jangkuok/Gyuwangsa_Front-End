@@ -8,9 +8,10 @@ import { selectListCategory, selectListItem } from '../../api/categoryApi';
 import FetchingModal from '../common/FetchingModal';
 import SizeComponet from '../common/SizeComponet';
 import SizeInfoComponet from '../common/SizeInfoComponet';
+import { selectListColor } from '../../api/colorApi';
 
 const initState = {
-    brandNo: 4,
+    brandNo: 1,
     categoryNo: 1,
     itemNo: 1,
     pdNo: '',
@@ -37,19 +38,26 @@ function PdInfoInsertComponent() {
 
     const [categoryList, setCategoryList] = useState([])
 
-    const [category, setCategory] = useState(null)
+    const [category, setCategory] = useState([])
+
 
     const [fetching, setFetching] = useState(false)
+
+    const [color, setColor] = useState([])
+
+    const [colorList, setColorList] = useState([])
 
     const { movePagePdInfo } = PageCustomMove()
 
     const { pageList } = PageCustomMove()
 
-    // useEffect(() => {
-    //     selectListCategory().then(data => {
-    //         setCategoryList(data)
-    //     })
-    // }, [])
+
+    //색상 리스트
+    useEffect(() => {
+        selectListColor().then(data => {
+            setColor(data)
+        })
+    }, [])
 
     //카테고리 리스트
     const handleCategoryList = () => {
@@ -86,11 +94,19 @@ function PdInfoInsertComponent() {
         setSizeList(resultSizeList)
     }
 
-
     //상품 정보 주입
     const handleChangePdInfo = (e) => {
         pdInfo[e.target.name] = e.target.value
         setPdInfo({ ...pdInfo })
+    }
+
+    //색상 저장
+    const onCheckedElement = (checked, item) => {
+        if (checked) {
+            setColorList([...colorList, item])
+        } else if (!checked) {
+            setColorList(colorList.filter(el => el !== item))
+        }
     }
 
     //상품 등록
@@ -110,12 +126,19 @@ function PdInfoInsertComponent() {
 
         formData.append("pdInfo", pdInfoDTO)
 
+        const jsonColor = JSON.stringify(colorList)
+        const colorDTO = new Blob([jsonColor], { type: 'application/json' })
+
+        formData.append("colorList", colorDTO)
+
+        console.log(jsonColor)
+
         insertPdInfo(formData).then(data => {
             window.confirm('상품 등록을 완료 했습니다.')
-            //movePagePdInfo(data.pdNo)
+            movePagePdInfo(data.pdNo)
         })
 
-        
+
     }
 
     const textTpyeClass = 'text-base text-gray-500 font-semibold mb-2 block'
@@ -131,14 +154,13 @@ function PdInfoInsertComponent() {
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GYUWANGSA</h2>
                 </div>
                 <div className="border-b border-gray-900/10 pb-12">
-                    <label class="text-base text-gray-500 font-semibold mb-2 block">상품 등록</label>
+                    <label className="text-base text-gray-500 font-semibold mb-2 block">상품 등록</label>
                     {/* <h2 className="text-base font-semibold leading-7 text-gray-900">상품 등록</h2> */}
                     <p className="mt-1 text-sm leading-6 text-gray-600">This is the page where the product is registered.</p>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
                         {/* 브랜드 */}
                         <div className="sm:col-span-2">
-                            <label class={textTpyeClass}>
+                            <label className={textTpyeClass}>
                                 브랜드
                             </label>
                             <div className="mt-2">
@@ -147,7 +169,7 @@ function PdInfoInsertComponent() {
                                     name="brandNm"
                                     id="brandNm"
                                     //value={pdInfo.brandNm}
-                                    value={'자라'}
+                                    value={'우영미'}
                                     onChange={handleChangePdInfo}
                                     className='block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none sm:text-sm sm:leading-6 bg-gray-100'
                                     readOnly
@@ -171,8 +193,8 @@ function PdInfoInsertComponent() {
                                     className={`${selectClass}`}
                                 >
                                     <option value={"선택하세요"}>선택하세요</option>
-                                    {categoryList && categoryList.map((category) => (
-                                        <option value={category.categoryNo} >{category.categoryNm}</option>
+                                    {categoryList && categoryList.map((category, i) => (
+                                        <option key={i} value={category.categoryNo} >{category.categoryNm}</option>
                                     ))}
                                 </select>
 
@@ -194,8 +216,8 @@ function PdInfoInsertComponent() {
                                     className={`${selectClass}`}
                                 >
                                     <option value={"선택하세요"}>선택하세요</option>
-                                    {itemList.map((item) =>
-                                        <option value={item.itemNo}>{item.itemNm}</option>
+                                    {itemList && itemList.map((item, i) =>
+                                        <option key={i} value={item.itemNo}>{item.itemNm}</option>
                                     )}
                                 </select>
                             </div>
@@ -274,6 +296,27 @@ function PdInfoInsertComponent() {
                     <SizeComponet categoryNo={category} addSize={addSize} />
                 </div>
 
+                {/* 색상 등록 */}
+                <div className="border-b border-gray-900/10 pb-12">
+                    <div className="mt-10 grid grid-cols-4 gap-4">
+                        <label className='text-base text-gray-500 font-semibold mb-2 block col-span-4'>
+                            색상
+                        </label>
+                        {color && color.map((item, i) => (
+                            <div className="mt-2 flex min-w-20" key={i}>
+                                <input className='w-4 h-4 mr-2' type='checkbox'
+                                    id={item.colorNm}
+                                    value={item.colorNm}
+                                    onChange={e => { onCheckedElement(e.target.checked, e.target.value) }}
+                                />
+                                <h3 className="text-xs text-gray-900  whitespace-normal">
+                                    {item.colorNm}
+                                </h3>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* 파일 업로드 */}
                 <div className="border-b border-gray-900/10 pb-12">
                     <div className="col-span-full">
@@ -322,9 +365,6 @@ function PdInfoInsertComponent() {
                     </button>
                 </div>
             </div>
-
-
-
             {/* 로딩 */}
             {fetching ? <FetchingModal /> : <></>}
 

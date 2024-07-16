@@ -67,8 +67,8 @@ function OrderComponent(props) {
 
     // 주소 검색
     const [address, setAddress] = useState({
-        address: '',
-        zonecode: ''
+        address: user.addr,
+        zonecode: user.addrNo
     });
 
     const [popup, setPopup] = useState(false);

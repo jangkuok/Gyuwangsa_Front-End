@@ -17,10 +17,11 @@ export const addOrder = async (orderDtlDTO) => {
     return res.data
 }
 
-export const selectOrderListByUser = async (userId) => {
-    const res = await jwtAxios.get(`${prefix}/orderList/${userId}`)
+export const selectOrderListByUser = async (userId,page,size) => {
+    const res = await jwtAxios.get(`${prefix}/orderList/${userId}`,{params:{page,size}})
     return res.data
 }
+
 
 export const removeOrder = async (ordDtlNo) => {
     const res = await jwtAxios.put(`${prefix}/orderCancel/${ordDtlNo}`)

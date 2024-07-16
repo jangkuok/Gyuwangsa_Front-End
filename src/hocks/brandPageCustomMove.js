@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createSearchParams, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import UserCustomLogin from "./userCustomLogin";
 
 
 const getNum  = (param, defaultValue) => {
@@ -10,8 +9,7 @@ const getNum  = (param, defaultValue) => {
     return parseInt(param)
 }
 
-const PageCustomMove = () => {
-
+const BrandPageCustomMove = () => {
     const navigate = useNavigate()
 
     const [queryParams] = useSearchParams()
@@ -23,14 +21,13 @@ const PageCustomMove = () => {
     const size = getNum(queryParams.get('size'),20)
     const categoryNo = queryParams.get('categoryNo')
     const itemNo = queryParams.get('itemNo')
-    
+
 
     const queryDefault = createSearchParams({page,size}).toString()
 
     const pageList = (pageParam) =>{
         
-        let queryStr = ""
-        let header = ""
+        let queryStr = "";
 
         if(pageParam){
             const pageNum = getNum(pageParam.page,1)
@@ -39,9 +36,20 @@ const PageCustomMove = () => {
 
  
             queryStr = createSearchParams({page:pageNum,size:sizeNum}).toString()
-            header = { headers: { 'Authorization': pageParam.userId } }
 
-            navigate({pathname:`../product/item/${pageParam.categoryNo}/${pageParam.itemNo}`, search:queryStr})
+
+            if( categoryNo === 0 && itemNo === 0){
+                navigate({pathname:`../brand/pdInfoList/${pageParam.brandNo}`, search:queryStr})
+            }
+
+            if( categoryNo !== 0 && itemNo === 0){
+                navigate({pathname:`../brand/pdInfoList/${pageParam.brandNo}/${pageParam.categoryNo}`, search:queryStr})
+            }
+
+            if( categoryNo !== 0 && itemNo !== 0){
+                navigate({pathname:`../brand/pdInfoList/${pageParam.brandNo}/${pageParam.categoryNo}/${pageParam.itemNo}`, search:queryStr})
+            }
+            
 
         }else{
             queryStr = queryDefault
@@ -49,27 +57,12 @@ const PageCustomMove = () => {
 
         setRefresh(!refresh)
 
-        header = { headers: { 'Authorization': pageParam.userId } }
-        navigate({pathname:`../product/item/${pageParam.categoryNo}/${pageParam.itemNo}`, search:queryStr})
+        navigate({pathname:`../brand/pdInfoList/${pageParam.brandNo}`, search:queryStr})
     }
 
-    const modifyPage = (pdInfo) => {
-        navigate({
-            pathname:`../product/modify/${pdInfo.pdNo}`,
-            search:queryDefault
-        })
-    }
 
-    const movePagePdInfo = (num) => {
-        
-        navigate({
-            pathname:`../product/info/${num}`,
-            search:queryDefault
-        })
-    }
-
-    return {pageList,modifyPage,movePagePdInfo,page,size,refresh,categoryNo,itemNo}
+    return {pageList}
 
 }
 
-export default PageCustomMove;
+export default BrandPageCustomMove;

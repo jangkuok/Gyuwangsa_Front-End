@@ -10,6 +10,8 @@ const ProductModify = lazy(() => import("../pages/pdInfo/ProductModifyPage"))
 
 const ProductInsert = lazy(() => import("../pages/pdInfo/ProductAddPage"))
 
+const ProductSearchPage = lazy(() => import("../pages/pdInfo/ProductSearchPage"))
+
 
 const productRouter = () => {
 
@@ -30,6 +32,10 @@ const productRouter = () => {
         {
             path: 'product/productAddPage',
             element: <Suspense fallback={Loading}><ProductInsert/></Suspense>
+        },
+        {
+            path: 'product/search/:keyword',
+            element: <Suspense fallback={Loading}><ProductSearchPage/></Suspense>
         },
    ]
 }

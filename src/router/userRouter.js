@@ -32,7 +32,7 @@ const userRouter = () => {
             element:<Suspense fallback={Loading}><KakaoRedirectPage/></Suspense>
         },
         {
-            path: 'user/modifyPage',
+            path: 'user/modifyPage/:userId',
             element:<Suspense fallback={Loading}><ModifyPage/></Suspense>
         },
         {

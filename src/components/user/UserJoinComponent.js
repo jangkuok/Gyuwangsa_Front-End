@@ -90,17 +90,30 @@ function UserJoinComponent(props) {
         user.addrNo = address.zonecode
         user.addr = address.address
 
+        const pattern =  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~@#$!%*?&])[a-zA-Z\d~@#$!%*?&]{8,}$/
+
         if(userIdState === false){
             window.confirm('아이디 확인이 필요합니다.')
             return
         }
 
-        if(user.pwd === '' || user.name === ''|| user.email === ''|| user.phone === ''|| user.addrNo === ''|| user.addr === ''|| user.addrDtl === ''|| user.sexCd === ''){
+        if(user.name === ''|| user.email === ''|| user.phone === ''|| user.addrNo === ''|| user.addr === ''|| user.addrDtl === ''|| user.sexCd === ''){
             window.confirm('정보를 입력하세요.')
+            return
+        }
+
+        if(!pattern.test(user.pwd)){
+            window.confirm('비밀번호는 영어,숫자,특수문자로 이루어져야 하며 8글자 이상으로 입력하세요.')
             return
         }
         
         if (brandNm !== '') {
+
+            if(brandNo !== 0|| brandNm === ''){
+                window.confirm('브랜드 정보를 입력하세요.')
+                return
+            }
+
             const formData = new FormData()
             const jsonUser = JSON.stringify(user)
             const memberDTO = new Blob([jsonUser], { type: 'application/json' })
@@ -116,7 +129,7 @@ function UserJoinComponent(props) {
         }
 
         window.confirm('회원 가입을 축하 드립니다.')
-        moveToPath("/")
+        moveToPath("/loginPage")
 
     }
 

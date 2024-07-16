@@ -6,8 +6,6 @@ import PdInfoByIdComponent from '../../components/pdInfo/PdInfoByIdComponent';
 
 function ProductPage() {
 const {pdNo} = useParams()
-console.log("PD PAGE")
-console.log(pdNo)
     return (
         <BasicLayout>
             <PdInfoByIdComponent pdNo={pdNo}/>  
