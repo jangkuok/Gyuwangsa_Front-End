@@ -136,7 +136,7 @@ function BrandPageComponent({ brandNo }) {
     }
 
     const handleLikeButton = (pdNo) => {
-        if(userId === ''){
+        if (userId === '') {
             window.confirm('로그인이 필요합니다.')
             return
         }
@@ -144,7 +144,7 @@ function BrandPageComponent({ brandNo }) {
     }
 
     const handleLikeCancelButton = (pdNo) => {
-        if(userId === ''){
+        if (userId === '') {
             window.confirm('로그인이 필요합니다.')
             return
         }
@@ -216,7 +216,10 @@ function BrandPageComponent({ brandNo }) {
 
                     <div className="bg-white p-6 rounded shadow">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-xl font-bold">Product</h3>
+                            <div>
+                                <h2 className="text-lg font-extrabold text-gray-800 ">Product({brandListPdInfo.totalCount}개)</h2>
+                                <p className="text-[#767676] text-[14px] mb-14">상 품</p>
+                            </div>
                             <Link to='/product/productAddPage'>
                                 <button className="py-2 px-4 border bg-gray-900 text-white min-w-32">+ 상품 추가</button>
                             </Link>
@@ -234,7 +237,7 @@ function BrandPageComponent({ brandNo }) {
                                     <div className="p-2">
                                         <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
                                         <h3 className="text-lg font-bold text-gray-800">{pdInfo.pdName}</h3>
-                                        <div className="mt-4 flex items-center flex-wrap gap-2">
+                                        <div className="flex items-center flex-wrap gap-2">
                                             <h4 className="text-lg font-bold text-gray-800">\{ }{pdInfo.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
 
                                             <div className="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer ml-auto">
@@ -261,7 +264,7 @@ function BrandPageComponent({ brandNo }) {
                             ))}
                         </div>
                         <div>
-                            <PageMoveBrandComponent  setPage={setPage} brandListPdInfo={brandListPdInfo} categoryNumber={categoryNumber} itemNumber={itemNumber} />
+                            <PageMoveBrandComponent setPage={setPage} brandListPdInfo={brandListPdInfo} categoryNumber={categoryNumber} itemNumber={itemNumber} />
                         </div>
 
                     </div>

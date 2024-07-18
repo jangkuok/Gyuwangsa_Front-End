@@ -65,7 +65,7 @@ function PdInfoSearchListComponent({ keyword }) {
 
     useEffect(() => {
 
-        if (brandList.totalCount !== 1  ) {
+        if (brandList.totalCount !== 1) {
             //브랜드 키워드 리스트
             selectBrandByKeyword(keyword, page, size).then((data) => {
                 setBrandList(data)
@@ -128,43 +128,45 @@ function PdInfoSearchListComponent({ keyword }) {
                     : <></>
                 }
                 {brandList.totalCount !== 0 ?
-                    <div>
-                        <h2 className="text-lg font-extrabold text-gray-600 mb-10">브랜드({brandList.totalCount}개)</h2>
-                        {brandList.dtoList.map((brandInfo, i) => (
-                            <Link key={i} to={`/brand/${brandInfo.brandNo}`}>
-                                <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6 border rounded-lg">
-                                    <div className="flex flex-col justify-between ">
-                                        <div className="bg-white flex mb-6 last:mb-0 rounded-2xl flex-col ">
-                                            <div className="flex-1 p-6 undefined ">
-                                                <div className="flex flex-col xl:flex-row items-center justify-between ">
-                                                    <div className="flex flex-col xl:flex-row items-center justify-start xl-6 xl:mb-0 ">
-                                                        <span className="inline-flex justify-center items-center xl:mr-6 xl-6 xl:mb-0">
-                                                            <img className='h-24 w-24' src={`${host}/brand/view/${brandInfo.brandLog}`} />
-                                                        </span>
-                                                        <div className="text-center space-y-1 xl:text-left xl:mr-4">
-                                                            <h4 className="text-xl font-semibold ">{brandInfo.engNm}</h4>
-                                                            <p className="text-gray-500 dark:text-slate-400">
-                                                                <b>{brandInfo.brandNm}</b>
-                                                            </p>
-                                                            <p className="text-gray-500 dark:text-slate-400">
-                                                                <b>{brandInfo.note}</b>
-                                                            </p>
+                        <div className="border-b border-gray-300 pb-9">
+                            <h2 className="text-lg font-extrabold text-gray-800">Brand({brandList.totalCount}개)</h2>
+                            <p className="text-[#767676] text-[14px]  mb-5">브랜드</p>
+                            {brandList.dtoList.map((brandInfo, i) => (
+                                <Link key={i} to={`/brand/${brandInfo.brandNo}`}>
+                                    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6 border rounded-lg">
+                                        <div className="flex flex-col justify-between ">
+                                            <div className="bg-white flex mb-6 last:mb-0 rounded-2xl flex-col ">
+                                                <div className="flex-1 p-6 undefined ">
+                                                    <div className="flex flex-col xl:flex-row items-center justify-between ">
+                                                        <div className="flex flex-col xl:flex-row items-center justify-start xl-6 xl:mb-0 ">
+                                                            <span className="inline-flex justify-center items-center xl:mr-6 xl-6 xl:mb-0">
+                                                                <img className='h-24 w-24' src={`${host}/brand/view/${brandInfo.brandLog}`} />
+                                                            </span>
+                                                            <div className="text-center space-y-1 xl:text-left xl:mr-4">
+                                                                <h4 className="text-xl font-semibold ">{brandInfo.engNm}</h4>
+                                                                <p className="text-gray-500 dark:text-slate-400">
+                                                                    <b>{brandInfo.brandNm}</b>
+                                                                </p>
+                                                                <p className="text-gray-500 dark:text-slate-400">
+                                                                    <b>{brandInfo.note}</b>
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     :
                     <></>
                 }
                 {brandList.totalCount === 1 ?
                     <div>
-                        <h2 className="text-lg font-extrabold text-gray-600 mb-10">브랜드 상품({brandListPdInfo.totalCount}개)</h2>
+                        <h2 className="text-lg font-extrabold text-gray-800 pt-9">Brand Product({brandListPdInfo.totalCount}개)</h2>
+                        <p className="text-[#767676] text-[14px]  mb-5">브랜드 상품</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-6">
                             {brandListPdInfo && brandListPdInfo.dtoList.map((pdInfo, i) => (
                                 <div className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:scale-[1.02] transition-all" key={i} >
@@ -175,9 +177,11 @@ function PdInfoSearchListComponent({ keyword }) {
                                         </div>
                                     </Link>
                                     <div className="p-2">
-                                        <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
+                                        <Link to={`/brand/${pdInfo.brandNo}`}>
+                                            <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
+                                        </Link>
                                         <h3 className="text-lg font-bold text-gray-800">{pdInfo.pdName}</h3>
-                                        <div className="mt-4 flex items-center flex-wrap gap-2">
+                                        <div className="flex items-center flex-wrap gap-2">
                                             <h4 className="text-lg font-bold text-gray-800">\{ }{pdInfo.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
 
                                             <div className="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer ml-auto">

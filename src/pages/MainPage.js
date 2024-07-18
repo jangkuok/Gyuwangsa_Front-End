@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BasicLayout from '../layouts/BasicLayout';
+import MainPageCarouel from '../mainPage/MainPageCarouel';
+import MainPageLikeRank from '../mainPage/MainPageLikeRank';
+import BrandListCarouel from '../mainPage/BrandListCarouel';
+import RandomPdList from '../mainPage/RandomPdList';
 
 function MainPage(props) {
     return (
         <BasicLayout>
-            <div className={'text-3xl'}>MAIN PAGE</div>
+            <MainPageCarouel />
+            <MainPageLikeRank />
+            <BrandListCarouel />
+            <div>
+                <img className='h-96 w-full' src={"/public_assets/advertising6.jpg"} />
+            </div>
+            <RandomPdList />
         </BasicLayout>
     );
 }

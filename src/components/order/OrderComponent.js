@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { addOrder, orderPageLoad } from '../../api/orderApi';
 import { host } from '../pdInfo/PdInfoByIdComponent';
 import AddressPopModal from '../../hocks/addressPopModal';
@@ -14,6 +14,7 @@ const initState = {
     addrDtl: '',
     buyAmt: '',
     color: '',
+    email: '',
     size: '',
     deliNo: '',
     deliState: '',
@@ -29,6 +30,7 @@ const userInitState = {
     addrNo: '',
     addr: '',
     addrDtl: '',
+    deliNo: ''
 }
 
 
@@ -44,10 +46,22 @@ function OrderComponent(props) {
 
     const { loginState } = UserCustomLogin()
 
+    const [orderName, setOrderName] = useState('')
+
+    const deliNo = `od_${new Date().getTime()}`
+
+    const navigate = useNavigate()
+
     //선택한 상품 리스트
     useEffect(() => {
         orderPageLoad(orderList).then(data => {
             setOrder(data)
+            if (data.length > 1) {
+                setOrderName(data[0].pdName + " 외 " + (data.length - 1))
+            } else {
+                setOrderName(data[0].pdName)
+            }
+
         })
 
     }, [])
@@ -58,6 +72,19 @@ function OrderComponent(props) {
             setUser(data)
         })
     }, [loginState.userId])
+
+    //결제 api
+    useEffect(() => {
+        const jquery = document.createElement("script");
+        jquery.src = "https://code.jquery.com/jquery-1.12.4.min.js";
+        const iamport = document.createElement("script");
+        iamport.src = "https://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
+        document.head.appendChild(jquery);
+        document.head.appendChild(iamport);
+        return () => {
+            document.head.removeChild(jquery); document.head.removeChild(iamport);
+        }
+    }, []);
 
     //정보 주입
     const handleChangeUser = (e) => {
@@ -76,6 +103,7 @@ function OrderComponent(props) {
     const handleAddressButton = (data) => {
         setPopup(!popup);
     }
+    console.log(orderName)
 
     //주문 정보 담기
     const orderListDto = order.map((list) => {
@@ -93,6 +121,7 @@ function OrderComponent(props) {
             pdName: list.pdName,
             userId: user.userId,
             brandNo: list.brandNo,
+            deliNo: deliNo
         }
     })
 
@@ -102,12 +131,45 @@ function OrderComponent(props) {
 
     formData.append("orderDtlDTO", orderDtlDTO)
 
+    //결제 성공 / 실패
+    const callback = (response) => {
+        const { success, error_msg, imp_uid, merchant_uid, pay_method, paid_amount, status } = response;
+        if (success) {
+            alert('결제 성공');
 
+            addOrder(formData)
+
+            window.confirm('주문을 완료 했습니다.')
+            navigate({ pathname: '/user/myPage' }, { replace: true })
+        } else {
+            alert(`결제 실패 : ${error_msg}`);
+        }
+    }
 
     //주문 버튼
     const handleOrderButton = () => {
-        console.log(jsonOrder)
-        addOrder(formData)
+
+        const { IMP } = window;
+        IMP.init('imp15164671'); // 결제 데이터 정의
+        const data = {
+            pg: 'kakaopay', // PG사 (필수항목)
+            pay_method: 'card', // 결제수단 (필수항목)
+            merchant_uid: deliNo, // 결제금액 (필수항목)
+            name: orderName, // 주문명 (필수항목)
+            amount: '1', // 금액 (필수항목)
+            custom_data: { name: '부가정보', desc: '세부 부가정보' },
+            buyer_name: user.name, // 구매자 이름
+            buyer_tel: user.phone, // 구매자 전화번호 (필수항목)
+            buyer_email: user.email, // 구매자 이메일
+            buyer_addr: address.zonecode,
+            buyer_postalcode: address.address + ' ' + user.addrDtl
+        };
+
+        IMP.request_pay(data, callback);
+
+
+
+
     }
 
 
@@ -117,7 +179,7 @@ function OrderComponent(props) {
 
         <div className="h-screen pt-20">
             <h1 className="mb-10 text-2xl font-bold">주문하기</h1>
-            
+
             <div className=" space-y-5 max-w-4xl px-4 sm:px-6 lg:max-w-7xl lg:px-5">
                 <div className="border-b border-gray-900/10 pb-12">
                     <div className="rounded-lg md:w-full">

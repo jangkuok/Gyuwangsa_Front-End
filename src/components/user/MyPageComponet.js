@@ -134,7 +134,7 @@ function MyPageComponet(props) {
                                                 }
                                                 {Object.is(`${item.deliStatus}`, '결제 완료') || Object.is(`${item.deliStatus}`, '상품 준비중') ?
                                                     <div className=''>
-                                                        <button className="py-2 px-4 border bg-gray-900 text-white ">결제하기</button>
+                                                        <button className="py-2 px-4 border bg-gray-900 text-white ">결제취소</button>
                                                     </div>
                                                     : <></>
                                                 }

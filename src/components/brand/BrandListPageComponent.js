@@ -33,8 +33,9 @@ function BrandListPageComponent(props) {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-            <h2 className="text-lg font-extrabold text-gray-600 mb-14">브랜드</h2>
-                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            <h2 className="text-lg font-extrabold text-gray-800">Brand({brandList.totalCount}개)</h2>
+            <p className="text-[#767676] text-[14px]  mb-14">브랜드</p>
+                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-8">
                     {brandList.dtoList.map((brand, i) => (
                         <Link to={`/brand/${brand.brandNo}`}>
                             <div className="aspect-h-1 aspect-w-1 w-32 overflow-hidden rounded-lg xl:aspect-h-8 xl:aspect-w-7 ">

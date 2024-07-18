@@ -75,9 +75,6 @@ function HeaderNavbarButton(props) {
 
   return (
     <div className="w-full bg-[#F5F5F3] relative">
-
-
-
       <div className="max-w-container mx-auto">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full px-4 pb-4 lg:pb-0 h-full lg:h-24">
           <div className="relative w-full lg:w-[300px] h-[50px] text-base text-primeColor bg-white flex items-center gap-2 justify-between px-6 rounded-xl">
@@ -99,7 +96,7 @@ function HeaderNavbarButton(props) {
                       Brand
                     </p>
                     {
-                      brandList.totalCount >= 1 ?
+                      brandList.totalCount >= 10 ?
                         <div>
                           <Link to={`/brand/search/${searchQuery}`}>
                             <p className="max-w text-xs text-gray-600 text-center mb-3 cursor-pointer ">

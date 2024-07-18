@@ -44,3 +44,14 @@ export const selectPdInfoByKeyword = async (keyword,page,size,userId) => {
     const res = await axios.get(`${prefix}/search/${keyword}`,{ params: { userId, page, size }})
     return res.data
 }
+
+
+export const selectLikePdInfoRank = async () => {
+    const res = await axios.get(`${prefix}/likeRank`)
+    return res.data
+}
+
+export const selectRandomPdList = async () => {
+    const res = await axios.get(`${prefix}/randomPdInfo`)
+    return res.data
+}

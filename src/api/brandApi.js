@@ -34,6 +34,12 @@ export const selectBrandList = async (page,size) =>{
     return res.data
 }
 
+//브랜드 랜덤 리스트 조회
+export const selectRandomBrandList = async () =>{
+    const res = await axios.get(`${prefix}/random`)
+    return res.data
+}
+
 //브랜드 전체 상품 조회
 export const selectListByBrandPdInfo = async (brandNo,page,size, userId) =>{
     const res = await axios.get(`${prefix}/pdInfoList/${brandNo}`,{ params: { userId, page, size } })

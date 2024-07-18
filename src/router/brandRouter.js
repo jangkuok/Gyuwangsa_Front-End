@@ -12,7 +12,6 @@ const BrandModifyPage = lazy(() => import("../pages/brand/BrandModifyPage"))
 
 const BrandOrderPage = lazy(() => import("../pages/brand/BrandOrderPage"))
 
-const BrandSearchPage  = lazy(() => import("../pages/brand/BrandSearchPage"))
 
 function brandRouter(props) {
     return [
@@ -44,10 +43,7 @@ function brandRouter(props) {
             path: 'brand/orderPage/:brandNo',
             element: <Suspense fallback={Loading}><BrandOrderPage/></Suspense>
         },
-        {
-            path: 'brand/search/:keyword',
-            element: <Suspense fallback={Loading}><BrandSearchPage/></Suspense>
-        },
+
 
    ]
 }

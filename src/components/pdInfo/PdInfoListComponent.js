@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PageCustomMove from '../../hocks/pageCustomMove';
 import { API_SERVER_HOST, selectListByPdInfo } from '../../api/pdInfoApi';
 import PageComponent from '../common/PageComponent';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import FetchingModal from '../common/FetchingModal';
 import UserCustomLogin from '../../hocks/userCustomLogin';
 import { useDispatch } from 'react-redux';
@@ -69,7 +69,8 @@ function PdInfoListComponent() {
   return (
     <div className="bg-white ">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-1 lg:max-w-7xl lg:px-8">
-        <h2 className="text-lg font-extrabold text-gray-600 mb-14">상 품({pdInfoList.totalCount}개)</h2>
+        <h2 className="text-lg font-extrabold text-gray-800 ">Product({pdInfoList.totalCount}개)</h2>
+        <p className="text-[#767676] text-[14px] mb-14">상 품</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {pdInfoList.dtoList.map((pdInfo, i) => (
             <div className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:scale-[1.02] transition-all" key={i}>
@@ -78,11 +79,12 @@ function PdInfoListComponent() {
                 <img src={`${host}/product/view/${pdInfo.imageList[0]}`} alt="Product 1"
                   className="h-full w-full object-cover object-top" />
               </div>
-
               <div className="p-2">
-                <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
+                <Link to={`/brand/${pdInfo.brandNo}`}>
+                  <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
+                </Link>
                 <h3 className="text-lg font-bold text-gray-800">{pdInfo.pdName}</h3>
-                <div className="mt-4 flex items-center flex-wrap gap-2">
+                <div className="flex items-center flex-wrap gap-2">
                   <h4 className="text-lg font-bold text-gray-800">\{ }{pdInfo.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
 
                   <div className="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer ml-auto">

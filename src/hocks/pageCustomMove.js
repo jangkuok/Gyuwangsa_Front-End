@@ -39,7 +39,6 @@ const PageCustomMove = () => {
 
  
             queryStr = createSearchParams({page:pageNum,size:sizeNum}).toString()
-            header = { headers: { 'Authorization': pageParam.userId } }
 
             navigate({pathname:`../product/item/${pageParam.categoryNo}/${pageParam.itemNo}`, search:queryStr})
 
@@ -49,7 +48,6 @@ const PageCustomMove = () => {
 
         setRefresh(!refresh)
 
-        header = { headers: { 'Authorization': pageParam.userId } }
         navigate({pathname:`../product/item/${pageParam.categoryNo}/${pageParam.itemNo}`, search:queryStr})
     }
 
