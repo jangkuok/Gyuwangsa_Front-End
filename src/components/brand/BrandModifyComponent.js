@@ -35,8 +35,9 @@ function BrandModifyComponent({ brandNo }) {
     useEffect(() => {
         selectBrandNo(brandNo).then(data => {
             setBrand(data)
+            setAddress({ address: data.addr, zonecode: data.addrNo })
         })
-    }, [])
+    }, [brandNo])
 
     // 주소 검색
     const [address, setAddress] = useState({
@@ -72,6 +73,11 @@ function BrandModifyComponent({ brandNo }) {
         brand.addrNo = address.zonecode
         brand.engNm = brand.engNm.toUpperCase()
 
+        const emailPattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        const phonePattern = /^[0-9]{0,13}$/
+        const brandEngNmPattern = /[^a-zA-Z]/g
+        const korLPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
+
         const formData = new FormData()
 
         let logFile = ''
@@ -91,21 +97,36 @@ function BrandModifyComponent({ brandNo }) {
             }
         }
 
-        if (brand.brandNm === '' || brand.engNm === '' || brand.addrNo === '' || brand.addr === '' || brand.addrDtl === '' || brand.comCall === '' || brand.comEmail === '' || brand.deliComp === '') {
+        if (brand.brandNm === '' || brand.engNm === '' || brand.addrNo === '' || brand.addr === '' || brand.addrDtl === '' || brand.comCall === '' || brand.comEmail === '' || brand.deliComp === '선택하세요') {
             window.confirm('정보를 입력하세요.')
             return
         }
-
-        // if ((logFile === undefined && brand.brandLog === '') || (mainFile === undefined && brand.brandMainImage === '')) {
-        //     window.confirm('이미지를 등록 하세요.')
-        //     return
-        // }
 
         if (logFile === undefined && brand.brandLog === '') {
             window.confirm('로고를 등록 하세요.')
             return
         }
 
+        if(!korLPattern.test(brand.brandNm)){
+            window.confirm('브랜드 이름은 한글만 작성이 가능합니다.')
+            return
+        }
+
+        if(!brandEngNmPattern.test(brand.engNm)){
+            window.confirm('브랜드 영어 이름으로 입력하세요.')
+            return
+        }
+
+        
+        if(!emailPattern.test(brand.comEmail)){
+            window.confirm('이메일 형식이 아닙니다.')
+            return
+        }
+
+        if(!phonePattern.test(brand.comCall)){
+            window.confirm('핸드폰 번호는 숫자만 작성이 가능합니다.')
+            return
+        }
 
         formData.append("logFile", logFile)
         formData.append("mainFile", mainFile)
@@ -164,7 +185,8 @@ function BrandModifyComponent({ brandNo }) {
                                 id="engNm"
                                 value={brand.engNm}
                                 onChange={handleChangeBrand}
-                                className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
+                                className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6 bg-gray-100'
+                                readOnly
                             />
                         </div>
                         {/* 회사 번호 */}
@@ -181,6 +203,7 @@ function BrandModifyComponent({ brandNo }) {
                                     id="comCall"
                                     value={brand.comCall}
                                     onChange={handleChangeBrand}
+                                    placeholder="회사 전화 번호 입력"
                                     className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -199,6 +222,7 @@ function BrandModifyComponent({ brandNo }) {
                                     id="comEmail"
                                     value={brand.comEmail}
                                     onChange={handleChangeBrand}
+                                    placeholder="이메일 입력"
                                     className="block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -286,6 +310,8 @@ function BrandModifyComponent({ brandNo }) {
                                 type="text"
                                 name="addrDtl"
                                 id="addrDtl"
+                                placeholder="상세 주소 입력"
+                                value={brand.addrDtl}
                                 onChange={handleChangeBrand}
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />

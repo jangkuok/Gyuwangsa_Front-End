@@ -1,4 +1,4 @@
-import  {RouterProvider} from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import root from "./router/root";
 
 import './style.css';
@@ -9,7 +9,7 @@ import 'swiper/components/pagination/pagination.min.css'
 
 function App() {
   return (
-        <RouterProvider router = {root}/>
+    <RouterProvider router={root} />
   )
 }
 

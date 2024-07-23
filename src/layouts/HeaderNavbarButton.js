@@ -71,6 +71,10 @@ function HeaderNavbarButton(props) {
       window.location.reload()
     }
   }
+  const brandPageMove = (brandNo) =>{
+    navigate({pathname:`/brand/${brandNo}`})
+    window.location.reload()
+  }
 
 
   return (
@@ -107,8 +111,8 @@ function HeaderNavbarButton(props) {
                         : <></>
                     }
                     {searchQuery && brandList.dtoList.map((brand, i) => (
-                      <Link to={`/brand/${brand.brandNo}`} key={i}>
-                        <div className="max-w h-28 bg-gray-100 mb-3 flex items-center gap-3 cursor-pointer">
+                      // <Link to={`/brand/${brand.brandNo}`} key={i}>
+                        <div onClick={()=>{brandPageMove(brand.brandNo)}} key={i} className="max-w h-28 bg-gray-100 mb-3 flex items-center gap-3 cursor-pointer">
                           <img className="w-16" src={`${host}/brand/view/${brand.brandLog}`} alt="brandLog" />
                           <div className="flex flex-col gap-1">
                             <p className="font-semibold text-lg">
@@ -119,7 +123,7 @@ function HeaderNavbarButton(props) {
                             </p>
                           </div>
                         </div>
-                      </Link>
+                      //</Link>
                     ))}
                   </div>
                   : <></>

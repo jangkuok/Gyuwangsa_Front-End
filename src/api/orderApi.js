@@ -5,8 +5,6 @@ export const API_SERVER_HOST = 'http://localhost:8080'
 const prefix = `${API_SERVER_HOST}/order`
 
 export const orderPageLoad = async (cartItemDTO) => {
-    //const header = { header: { 'Content-Tpye': 'multipart/form-data' } }
-    //const res = await jwtAxios.post(`${prefix}/orderPageLoad`,cartItemDTO,header)
     const res = await jwtAxios.post(`${prefix}/orderPageLoad`,cartItemDTO)
     return res.data
 }
@@ -23,7 +21,12 @@ export const selectOrderListByUser = async (userId,page,size) => {
 }
 
 
-export const removeOrder = async (ordDtlNo) => {
-    const res = await jwtAxios.put(`${prefix}/orderCancel/${ordDtlNo}`)
+export const removeOrder = async (ordDtlNo,deliState) => {
+    const res = await jwtAxios.put(`${prefix}/orderCancel/${ordDtlNo}/${deliState}`)
+    return res.data
+}
+
+export const cancelPaymentByDeliNo = async (deliNo) => {
+    const res = await jwtAxios.post(`${API_SERVER_HOST}/cancelOrder/${deliNo}`)
     return res.data
 }

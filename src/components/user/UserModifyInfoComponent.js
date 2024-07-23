@@ -32,6 +32,7 @@ function UserModifyInfoComponent(props) {
 
         selectUserInfo(loginState.userId).then((data) => {
             setUser(data)
+            setAddress({ address: data.addr, zonecode: data.addrNo })
         })
 
     }, [loginState.userId])
@@ -56,31 +57,44 @@ function UserModifyInfoComponent(props) {
         setUser({ ...user })
     }
 
-
+    console.log(user.pwd)
     //정보 수정
     const handleModifyButton = () => {
         user.addrNo = address.zonecode
         user.addr = address.address
 
-        const pattern =  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~@#$!%*?&])[a-zA-Z\d~@#$!%*?&]{8,}$/
+        const pattern = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,}$/
+        const emailPattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        const phonePattern = /^[0-9]{0,13}$/
 
         if (user.phone === '' || user.email === '' || user.addrNo === '' || user.addr === '' || user.addrDtl === '') {
             window.confirm('정보를 입력하세요.')
             return
         }
 
-        if(!pattern.test(user.pwd)){
-            window.confirm('비밀번호는 영어,숫자,특수문자로 이루어져야 하며 8글자 이상으로 입력하세요.')
+        if (user.joinType !== '카카오') {
+            if (!pattern.test(user.pwd)) {
+                window.confirm('비밀번호는 영어,숫자,특수문자로 이루어져야 하며 8글자 이상으로 입력하세요.')
+                return
+            }
+        }
+
+        if (!emailPattern.test(user.email)) {
+            window.confirm('이메일 형식이 아닙니다.')
             return
         }
 
-        modifyUserInfo(user).then((data) => {
+        if (!phonePattern.test(user.phone)) {
+            window.confirm('핸드폰 번호는 숫자만 작성이 가능합니다.')
+            return
+        }
+
+        modifyUserInfo(user).then(() => {
             window.confirm('회원 정보 수정을 완료했습니다.')
-            navigate({ pathname: `/user/myPage` }, { replace: true })
+            navigate({ pathname: `/` }, { replace: true })
         })
 
     }
-
     const textTpyeClass = 'text-base text-gray-500 font-semibold mb-2 block'
 
     return (
@@ -91,7 +105,7 @@ function UserModifyInfoComponent(props) {
                 </div>
                 <div className="border-b border-gray-900/10 pb-12">
                     <label className="text-base text-gray-500 font-semibold mb-2 block">회원 정보 수정</label>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">This page is a member information modification page.</p>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
                         {/* 아이디 */}
                         <div className="sm:col-start-1">
@@ -110,40 +124,58 @@ function UserModifyInfoComponent(props) {
                                 readOnly
                             />
                         </div>
+
                         {/* 비밀 번호 */}
-                        <div className="sm:col-start-1">
-                            <label className={textTpyeClass}>
-                                비밀번호
-                            </label>
-                        </div>
-                        <div className="sm:col-span-2">
-                            <div className="mt-2">
-                                <input
-                                    type="password"
-                                    name="pwd"
-                                    id="pwd"
-                                    onChange={handleChangeUser}
-                                    className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
-                                />
+                        {user.joinType !== '카카오' ?
+                            < div className="sm:col-start-1">
+                                <label className={textTpyeClass}>
+                                    비밀번호
+                                </label>
                             </div>
-                        </div>
+                            : <></>}
+
+                        {user.joinType !== '카카오' ?
+                            <div className="sm:col-span-2">
+                                <div className="mt-2">
+                                    <input
+                                        type="password"
+                                        name="pwd"
+                                        id="pwd"
+                                        onChange={handleChangeUser}
+                                        placeholder="비밀번호 입력(영문, 숫자, 특수문자 8자리 이상 조합)"
+                                        className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+                            : <></>}
                         {/* 이름 */}
                         <div className="sm:col-start-1">
                             <label className={textTpyeClass}>
                                 이  름
                             </label>
                         </div>
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-2 lg:col-span-2">
                             <div className="mt-2">
-                                <input
-                                    type="text"
-                                    name="name"
-                                    id="name"
-                                    value={user.name}
-                                    onChange={handleChangeUser}
-                                    className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6 bg-gray-100"
-                                    readOnly
-                                />
+                                {user.joinType === '카카오' ?
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        value={user.name}
+                                        onChange={handleChangeUser}
+                                        className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
+                                    />
+                                    :
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        value={user.name}
+                                        onChange={handleChangeUser}
+                                        className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6 bg-gray-100"
+                                        readOnly
+                                    />
+                                }
                             </div>
                         </div>
                         {/* 핸드폰 번호 */}
@@ -160,6 +192,7 @@ function UserModifyInfoComponent(props) {
                                     id="phone"
                                     value={user.phone}
                                     onChange={handleChangeUser}
+                                    placeholder="핸드폰 번호 입력"
                                     className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -178,6 +211,7 @@ function UserModifyInfoComponent(props) {
                                     id="email"
                                     value={user.email}
                                     onChange={handleChangeUser}
+                                    placeholder="이메일 입력"
                                     className="block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -241,6 +275,7 @@ function UserModifyInfoComponent(props) {
                                 id="addrDtl"
                                 value={user.addrDtl}
                                 onChange={handleChangeUser}
+                                placeholder="상세 주소 입력"
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />
                         </div>
@@ -265,7 +300,7 @@ function UserModifyInfoComponent(props) {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

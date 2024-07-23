@@ -9,15 +9,16 @@ import FetchingModal from '../common/FetchingModal';
 import SizeComponet from '../common/SizeComponet';
 import SizeInfoComponet from '../common/SizeInfoComponet';
 import { selectListColor } from '../../api/colorApi';
+import { getCookie } from '../../util/cookieUtil';
 
 const initState = {
-    brandNo: 1,
-    categoryNo: 1,
-    itemNo: 1,
+    brandNo: 0,
+    categoryNo: 0,
+    itemNo: 0,
     pdNo: '',
     startDate: '',
     pdName: '',
-    brandNm: '자라',
+    brandNm: '',
     endDate: '',
     buyAmt: 0,
     likeCnt: '',
@@ -51,13 +52,32 @@ function PdInfoInsertComponent() {
 
     const { pageList } = PageCustomMove()
 
+    const loginUser = getCookie('user');
+    const adminBrandCd = loginUser.brandCd
+    const adminBrandNm = loginUser.brandNm
+
+    const [openCategory, setOpenCategory] = useState(0)
+
 
     //색상 리스트
     useEffect(() => {
         selectListColor().then(data => {
             setColor(data)
         })
-    }, [])
+        if (openCategory !== 0) {
+            selectListCategory().then(data => {
+                setCategoryList(data)
+            })
+        }
+
+        if (pdInfo.categoryNo !== 0) {
+            setCategory(pdInfo.categoryNo)
+            setSizeList([])
+            selectListItem(pdInfo.categoryNo).then(data => {
+                setItemList(data)
+            })
+        }
+    }, [openCategory,pdInfo.categoryNo])
 
     //카테고리 리스트
     const handleCategoryList = () => {
@@ -119,6 +139,7 @@ function PdInfoInsertComponent() {
         }
 
         pdInfo.sizeList = addSizeList
+        pdInfo.brandNm = adminBrandNm
 
         const jsonPdInfo = JSON.stringify(pdInfo)
 
@@ -149,6 +170,8 @@ function PdInfoInsertComponent() {
 
     return (
         <div>
+            <input type='hidden' id='brandNo' name='brandNo' value={adminBrandCd} />
+
             <div className="space-y-5 mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                 <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GYUWANGSA</h2>
@@ -168,8 +191,7 @@ function PdInfoInsertComponent() {
                                     type="text"
                                     name="brandNm"
                                     id="brandNm"
-                                    //value={pdInfo.brandNm}
-                                    value={'우영미'}
+                                    value={adminBrandNm}
                                     onChange={handleChangePdInfo}
                                     className='block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none sm:text-sm sm:leading-6 bg-gray-100'
                                     readOnly
@@ -189,7 +211,8 @@ function PdInfoInsertComponent() {
                                     value={pdInfo.categoryNo}
                                     onChange={handleChangePdInfo}
                                     //onClick={() => handleItemList(pdInfo.categoryNo)}
-                                    onClick={() => { handleCategoryList(); handleItemList(pdInfo.categoryNo) }}
+                                    //onClick={() => { handleCategoryList(); handleItemList(pdInfo.categoryNo) }}
+                                    onClick={() => { setOpenCategory(() => 1); }}
                                     className={`${selectClass}`}
                                 >
                                     <option value={"선택하세요"}>선택하세요</option>

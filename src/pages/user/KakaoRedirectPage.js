@@ -19,18 +19,17 @@ function KakaoRedirectPage(props) {
     useEffect(()=>{
 
         getAccessToken(authCode).then(accessToken =>{
-            console.log("access : " + accessToken)
             getUserWithAccessToken(accessToken).then(user =>{
                 dispatch(login(user))
                 if(user && user.note === '정보 수정 필요'){
-                    moveToPath("/user/modifyPage")
+                    moveToPath(`/user/modifyPage/${user.userId}`)
                 }else{
                     window.location.replace("/")
                 }
             })
         })
 
-    })
+    },[authCode])
 
     return (
         <div>

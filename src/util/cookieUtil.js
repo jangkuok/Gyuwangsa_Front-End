@@ -15,6 +15,4 @@ export const getCookie = (name) =>{
 
 export const removeCookie = (name) =>{
     cookies.remove(name)
-    window.location.replace("/")
-    
 }

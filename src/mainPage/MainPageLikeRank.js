@@ -72,9 +72,9 @@ export default function MainPageLikeRank() {
           <Link to={`/brand/${product.brandNo}`}>
             <p className="text-[#767676] text-[14px]">[{product.brandNm}]</p>
           </Link>
-          <h3 className="text-lg font-bold text-gray-800">{product.pdName}</h3>
+          <h3 className="text-[15px]font-bold text-gray-800">{product.pdName}</h3>
           <div className="flex items-center flex-wrap gap-2">
-            <h4 className="text-lg font-bold text-gray-800">\{ }{product.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
+            <h4 className="text-[13px] font-bold text-gray-800">\{ }{product.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
           </div>
           <div className='grid grid-cols-5'>
             <svg

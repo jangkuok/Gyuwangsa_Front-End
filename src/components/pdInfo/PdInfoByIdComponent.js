@@ -9,9 +9,10 @@ import { BiShoppingBag } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlineHighlight, AiTwotoneDelete } from 'react-icons/ai';
 import useCustomCart from '../../hocks/useCustomCart';
 import UserCustomLogin from '../../hocks/userCustomLogin';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { selectBrandNo } from '../../api/brandApi';
 import PdInfoSizeComponent from './PdInfoSizeComponent';
+import { getCookie } from '../../util/cookieUtil';
 
 export const host = API_SERVER_HOST
 
@@ -66,15 +67,11 @@ function PdInfoByIdComponent({ pdNo }) {
 
     const [pdInfo, setPdInfo] = useState(initState)
 
-    const [brand, setBrand] = useState(initState)
+    const [brand, setBrand] = useState(initStateBrand)
 
     const { pageList, modifyPage } = PageCustomMove()
 
-    const [result, setResult] = useState(null)
-
-    const { cartItems, changeCart } = useCustomCart()
-
-    const { loginState } = UserCustomLogin()
+    const { changeCart } = useCustomCart()
 
     const [amount, setAmount] = useState(1);
 
@@ -87,6 +84,21 @@ function PdInfoByIdComponent({ pdNo }) {
     const navigate = useNavigate()
 
 
+    const { loginState } = UserCustomLogin()
+
+    const userRoleNm = loginState.roleNm
+
+    const brandAdmin = loginState.brandCd
+
+    useEffect(() => {
+        selectPdInfoByPdNo(pdNo).then((data) => {
+            setPdInfo(data)
+            selectBrandNo(data.brandNo).then((data) => {
+                setBrand(data)
+            })
+        })
+    }, [pdNo])
+
     //상품 사이즈 
     const sizeList = pdInfo.sizeList.map((size) => {
         return {
@@ -94,6 +106,7 @@ function PdInfoByIdComponent({ pdNo }) {
         }
     })
 
+    //사이즈 리스트(중복제거)
     const changeSizeList = [
         ...new Set(sizeList.map((size) => JSON.stringify(size))),
     ].map((size) => JSON.parse(size))
@@ -107,18 +120,10 @@ function PdInfoByIdComponent({ pdNo }) {
         }
     })
 
+    //색상 리스트(중복제거)
     const changeColorList = [
         ...new Set(colorList.map((color) => JSON.stringify(color))),
     ].map((color) => JSON.parse(color))
-
-
-    useEffect(() => {
-        selectPdInfoByPdNo(pdNo).then(data => {
-            setPdInfo(data)
-        })
-
-
-    }, [pdNo])
 
 
     //상품 색상 선택
@@ -144,7 +149,7 @@ function PdInfoByIdComponent({ pdNo }) {
     //마이너스
     const handleMinusCount = (index) => {
         choicePdInfoList[index].count = parseInt(choicePdInfoList[index].count) - 1
-        if (choicePdInfoList[index].count == 0) {
+        if (choicePdInfoList[index].count = 0) {
             choicePdInfoList[index].count = 1
         }
         setChoicePdInfo({ ...choicePdInfo })
@@ -159,15 +164,55 @@ function PdInfoByIdComponent({ pdNo }) {
     //선택 상품 삭제
     const handleRemoveList = (no) => {
         const resultInfo = choicePdInfoList.filter(choicePdInfoList => choicePdInfoList.no != no)
-        console.log(resultInfo)
         setChoicePdInfoList(resultInfo)
     }
 
-
     //선택한 상품 리스트 등록
     if (!Object.is('', choicePdInfo.color) && !Object.is('', choicePdInfo.size)) {
-        setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
-        setChoicePdInfo({ ...initStateChoice })
+
+
+        // const itemList = (list) => {
+        //     if (list.color === choicePdInfo.color && list.size === choicePdInfo.size) {
+        //         list.count = parseInt(list.count) + 1
+        //         setChoicePdInfo({ ...initStateChoice })
+        //         return true;
+        //     }
+        // }
+
+        // if (choicePdInfoList.filter(itemList) === false) {
+        //     setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
+        //     setChoicePdInfo({ ...initStateChoice })
+        // }
+
+        // const itemList = (list) => {
+        //     if (list.color !== choicePdInfo.color && list.size !== choicePdInfo.size) {
+        //         console.log(list)
+        //         setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
+        //         setChoicePdInfo({ ...initStateChoice })
+
+        //     }else{
+        //         list.count = parseInt(list.count) + 1
+        //         setChoicePdInfo({ ...initStateChoice })
+        //         return true;
+        //     }
+        // }
+
+        // choicePdInfoList.filter(itemList)
+
+        const itemList = (list) => {
+            if (list.color === choicePdInfo.color && list.size === choicePdInfo.size) {
+                list.count = parseInt(list.count) + 1
+                setChoicePdInfo({ ...initStateChoice })
+                return true
+            }
+        }
+
+        if (choicePdInfoList.filter(itemList).length === 0) {
+            setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
+            setChoicePdInfo({ ...initStateChoice })
+        }
+
+
     }
 
     //상품 삭제
@@ -181,15 +226,15 @@ function PdInfoByIdComponent({ pdNo }) {
     //장바구니 등록
     const handleAddCart = () => {
 
-        if (choicePdInfoList.length == 0 ) {
+        if (choicePdInfoList.length === 0) {
             window.confirm('선택한 상품이 없습니다.')
             return
         }
-        if (loginState.userId == '' ) {
+        if (loginState.userId === '') {
             window.confirm('로그인이 필요합니다.')
             return
         }
-        
+
         let count = 1
         //const addedItem = cartItems.filter(item => item.pdNo == parseInt(pdNo) && item.color == color && item.size == size)[0]
         // const addedItem = cartItems.filter(item => item.pdNo == parseInt(pdNo))[0]
@@ -201,7 +246,6 @@ function PdInfoByIdComponent({ pdNo }) {
         // }
 
         //장바구니 등록
-
         const selectCartList = choicePdInfoList.map((list) => {
             return {
                 userId: list.userId,
@@ -230,35 +274,50 @@ function PdInfoByIdComponent({ pdNo }) {
     const plusMinuceButton =
         "flex h-6 w-6 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500";
 
-
     return (
-        <div>
+        <div className="space-y-5 mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+            <Link to={`/brand/${pdInfo.brandNo}`}>
+                <p className="mt-5 pl-6 py-2 text-3xl font-bold text-white bg-black">{brand.engNm}</p>
+            </Link>
             <section className="container flex-grow mx-auto max-w-[1200px] border-b py-5 lg:grid lg:grid-cols-2 lg:py-10">
                 {/* image gallery */}
-                <div className="container ml-14 px-3">
+                <div className="container px-3">
                     <img src={`${host}/product/view/${pdInfo.imageList[0]}`} />
                     {/* /image gallery  */}
                 </div>
                 {/* description  */}
-
-                <div className="ml-16 px-5 lg:px-5 ">
-                    <h2 className="pt-3 text-2xl font-bold lg:pt-0">
+                <div className="px-5 lg:px-5 ">
+                    <h2 className="pt-3 text-3xl font-bold lg:pt-0">
                         {pdInfo.pdName}
                     </h2>
                     {/* 브랜드 */}
-                    <div className="grid grid-cols-4 gap-1">
-                        <p className="mt-5 font-bold"> 브랜드 </p>
-                        <p className="mt-5 font-bold text-gray-400"> {pdInfo.brandNm} </p>
+                    <div className="grid grid-cols-5 gap-1">
+                        <div>
+                            <p className="mt-5 font-bold"> 브랜드 </p>
+                        </div>
+                        <div className='col-span-4'>
+                            <Link to={`/brand/${pdInfo.brandNo}`}>
+                                <p className="mt-5 font-bold text-black">{brand.engNm}({pdInfo.brandNm})</p>
+                            </Link>
+                        </div>
                     </div>
                     {/* 성별 */}
-                    <div className="grid grid-cols-4 gap-1">
-                        <p className="mt-5 font-bold"> 성별 </p>
-                        <p className="mt-5 font-bold text-gray-400"> {pdInfo.sexCd} </p>
+                    <div className="grid grid-cols-5 gap-1">
+                        <div>
+                            <p className="mt-5 font-bold"> 성별 </p>
+                        </div>
+                        <div className='col-span-4'>
+                            <p className="mt-5 font-bold text-gray-700"> {pdInfo.sexCd} </p>
+                        </div>
                     </div>
                     {/* 좋아요 */}
-                    <div className="grid grid-cols-4 gap-1">
-                        <p className="mt-5 font-bold"> 좋아요 </p>
-                        <p className="mt-5 font-bold text-gray-400"> {pdInfo.likeCnt} </p>
+                    <div className="grid grid-cols-5 gap-1">
+                        <div>
+                            <p className="mt-5 font-bold"> 좋아요 </p>
+                        </div>
+                        <div className='col-span-4'>
+                            <p className="mt-5 font-bold text-gray-700"> {pdInfo.likeCnt} </p>
+                        </div>
                     </div>
                     {/* 가격 */}
                     <p className="mt-4 text-4xl font-bold">
@@ -273,14 +332,13 @@ function PdInfoByIdComponent({ pdNo }) {
                         <p className="pb-2 text-xs text-gray-500">사이즈</p>
                         <div className="flex gap-1">
                             {changeSizeList.map((size, index) => {
-
                                 return (
                                     <div
                                         id='size'
                                         name='size'
                                         key={index}
                                         onClick={() => handleSize(`${size.sizeType}`, index)}
-                                        className="flex h-10 w-10 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                        className="flex h-10 w-10 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-800"
                                     >
                                         {size.sizeType}
                                     </div>
@@ -301,7 +359,7 @@ function PdInfoByIdComponent({ pdNo }) {
                                         name='color'
                                         onClick={() => { handleColor(`${size.color}`, index) }}
                                         //className={`h-10 w-10 cursor-pointer border border-white bg-${size.colorCode} focus:ring-2 focus:ring-${size.colorCode} active:ring-2 active:ring-${size.colorCode}`}
-                                        className="flex h-10 w-16 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                        className="flex h-10 w-16 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-800"
                                     >
                                         {size.color}
                                     </div>
@@ -311,8 +369,7 @@ function PdInfoByIdComponent({ pdNo }) {
                         </div>
                     </div>
                     {/* 수량 */}
-                    <div className="mt-6">
-
+                    <div className="mt-6 mb-8">
                         {
                             choicePdInfoList.length > 0 ?
                                 <div>
@@ -341,32 +398,39 @@ function PdInfoByIdComponent({ pdNo }) {
                         }
 
                     </div>
-                    <div className="mt-7 flex flex-row items-center gap-6">
-                        <button
-                            onClick={() => handleAddCart()}
-                            className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-blue-800">
-                            <BiShoppingBag className="mx-2" />
-                            Add to cart
-                        </button>
-                        <button className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-red-500">
-                            <AiOutlineHeart className="mx-2" />
-                            Wishlist
-                        </button>
-                    </div>
-                    <div className="mt-7 flex flex-row items-center gap-6">
-                        <button
-                            onClick={() => modifyPage(pdInfo)}
-                            className="flex h-12 w-1/3 items-center justify-center bg-gray-900 text-white duration-100 hover:bg-gray-700">
-                            <AiOutlineHighlight className="mx-2" />
-                            수  정
-                        </button>
-                        <button
-                            onClick={handleClickRemove}
-                            className="flex h-12 w-1/3 items-center justify-center bg-gray-100 duration-100 hover:bg-gray-400">
-                            <AiTwotoneDelete className="mx-2" />
-                            삭  제
-                        </button>
-                    </div>
+                    {/* <div className="mt-7 flex flex-row items-center gap-6"> */}
+
+                    {userRoleNm !== 'BRAND_MANAGER' ?
+                        <div className="grid grid-cols-1">
+                            <button
+                                onClick={() => handleAddCart()}
+                                className="flex h-12 mb-5 items-center justify-center bg-gray-900 text-white duration-100">
+                                <BiShoppingBag className="mx-2" />
+                                Add to cart
+                            </button>
+                            <button className="flex h-12 mb-5 items-center justify-center bg-gray-100 duration-100">
+                                <AiOutlineHeart className="mx-2" />
+                                Wishlist
+                            </button>
+                        </div>
+                        : <></>}
+
+                    {brandAdmin === pdInfo.brandNo ?
+                        <div className="grid grid-cols-1">
+                            <button
+                                onClick={() => modifyPage(pdInfo)}
+                                className="flex h-12 mb-5 items-center justify-center bg-gray-900 text-white duration-100">
+                                <AiOutlineHighlight className="mx-2" />
+                                수  정
+                            </button>
+                            <button
+                                onClick={handleClickRemove}
+                                className="flex h-12 mb-5 items-center justify-center bg-gray-100 duration-100 ">
+                                <AiTwotoneDelete className="mx-2" />
+                                삭  제
+                            </button>
+                        </div>
+                        : <></>}
                 </div>
             </section>
 
@@ -374,7 +438,7 @@ function PdInfoByIdComponent({ pdNo }) {
 
             <div className='w-full justify-center flex flex-col m-auto items-center'>
 
-                <PdInfoSizeComponent sizeList={pdInfo.sizeList} categoryNo={pdInfo.categoryNo}/>
+                <PdInfoSizeComponent sizeList={pdInfo.sizeList} categoryNo={pdInfo.categoryNo} />
 
                 {pdInfo.imageList.map((fileNm, i) =>
                     <img src={`${host}/product/view/${fileNm}`}
@@ -383,8 +447,6 @@ function PdInfoByIdComponent({ pdNo }) {
                     />
                 )}
             </div>
-
-            {result ? <ResultModal title={'처리결과'} content={result} callbackFn={closeModal} /> : <></>}
         </div>
 
 

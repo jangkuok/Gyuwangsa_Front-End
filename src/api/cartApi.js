@@ -23,4 +23,20 @@ export const postChangeCartPage = async (cartItem) => {
     return res.data
 }
 
+export const postRemoveCart = async (cartItemNo) => {
+    const res = await jwtAxios.delete(`${host}/removeItem/${cartItemNo}`)
+
+    return res.data
+}
+
+export const removeCartList = async (cartItemNo) => {
+    const res = await jwtAxios.put(`${host}/removeCartList`,cartItemNo)
+
+    return res.data
+}
+
+
+
+
+
 

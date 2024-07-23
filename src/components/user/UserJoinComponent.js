@@ -69,11 +69,13 @@ function UserJoinComponent(props) {
 
     const handleBrandCheck = () => {
         selectBrandNo(brandNo).then((data) => {
-            if (data.brandNm !== null) {
+            if (data.brandNm !== null && data.stateCd === true) {
                 setBrandNm(data.brandNm)
-                console.log(brandNm)
             } else if (data.brandNm === null) {
                 window.confirm('존재 하지 않는 코드번호입니다.')
+                return
+            } else if (data.stateCd === false){
+                window.confirm('브랜드 등록 승인 중입니다.')
                 return
             }
         })
@@ -90,7 +92,10 @@ function UserJoinComponent(props) {
         user.addrNo = address.zonecode
         user.addr = address.address
 
-        const pattern =  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~@#$!%*?&])[a-zA-Z\d~@#$!%*?&]{8,}$/
+        const pattern = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,}$/
+        const emailPattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        const phonePattern = /^[0-9]{0,13}$/
+        const korLPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
 
         if(userIdState === false){
             window.confirm('아이디 확인이 필요합니다.')
@@ -102,8 +107,23 @@ function UserJoinComponent(props) {
             return
         }
 
+        if(!korLPattern.test(user.name)){
+            window.confirm('이름은 한글만 작성이 가능합니다.')
+            return
+        }
+
         if(!pattern.test(user.pwd)){
             window.confirm('비밀번호는 영어,숫자,특수문자로 이루어져야 하며 8글자 이상으로 입력하세요.')
+            return
+        }
+
+        if(!emailPattern.test(user.email)){
+            window.confirm('이메일 형식이 아닙니다.')
+            return
+        }
+
+        if(!phonePattern.test(user.phone)){
+            window.confirm('핸드폰 번호는 숫자만 작성이 가능합니다.')
             return
         }
         
@@ -168,7 +188,7 @@ function UserJoinComponent(props) {
                                     id="brandNo"
                                     onChange={handleBrandNo}
                                     className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
-                                    placeholder="코드 번호를 작성해주세요."
+                                    placeholder="코드 번호 입력"
                                 />
                             </div>
                             : <></>}
@@ -197,6 +217,7 @@ function UserJoinComponent(props) {
                                     name="brandNm"
                                     id="brandNm"
                                     value={brandNm}
+                                    placeholder="브랜드 이름 입력"
                                     className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6 bg-gray-100'
                                     readOnly
                                 />
@@ -215,6 +236,7 @@ function UserJoinComponent(props) {
                                 name="userId"
                                 id="userId"
                                 onChange={handleChangeUser}
+                                placeholder="아이디 입력"
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />
                         </div>
@@ -238,6 +260,7 @@ function UserJoinComponent(props) {
                                     name="pwd"
                                     id="pwd"
                                     onChange={handleChangeUser}
+                                    placeholder="비밀번호 입력(영문, 숫자, 특수문자 8자리 이상 조합)"
                                     className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -254,6 +277,7 @@ function UserJoinComponent(props) {
                                     type="text"
                                     name="name"
                                     id="name"
+                                    placeholder="이름 입력"
                                     onChange={handleChangeUser}
                                     className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
@@ -272,6 +296,7 @@ function UserJoinComponent(props) {
                                     name="phone"
                                     id="phone"
                                     onChange={handleChangeUser}
+                                    placeholder="핸드폰 번호 입력"
                                     className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -289,6 +314,7 @@ function UserJoinComponent(props) {
                                     name="email"
                                     id="email"
                                     onChange={handleChangeUser}
+                                    placeholder="이메일 입력"
                                     className="block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -352,6 +378,7 @@ function UserJoinComponent(props) {
                                 id="addrDtl"
                                 value={user.addrDtl}
                                 onChange={handleChangeUser}
+                                placeholder="상세 주소 입력"
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />
                         </div>

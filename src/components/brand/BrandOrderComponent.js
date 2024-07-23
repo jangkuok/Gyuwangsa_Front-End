@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { host } from '../pdInfo/PdInfoByIdComponent';
 import dayjs from 'dayjs';
 import BrandOrderPageComponent from './BrandOrderPageComponent';
+import { removeOrder } from '../../api/orderApi';
 
 
 const initState = {
@@ -43,7 +44,7 @@ function BrandOrderComponent({ brandNo }) {
     const [brand, setBrand] = useState(initState)
     const [orderState, setOrderState] = useState(0)
     const [page, setPage] = useState(1)
-    const size = 1
+    const size = 10
     //const [changeDelStatus,setChangeDelStatus] = useState('')
     let changeDelStatus = ''
 
@@ -145,6 +146,14 @@ function BrandOrderComponent({ brandNo }) {
             })
         }
     }, [brandNo, orderState, page, size])
+
+    const orderDeliState = (ordDtlNo, deliState) => {
+        if (window.confirm('[ ' + deliState + ' ]' + '로(으로) 변경 하시겠습니까?') == false) {
+            return
+        }
+        removeOrder(ordDtlNo, deliState)
+        window.location.reload()
+    }
 
     return (
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-1 lg:max-w-7xl lg:px-8 ">
@@ -275,13 +284,49 @@ function BrandOrderComponent({ brandNo }) {
                                             <div>
                                                 {Object.is(`${item.deliStatus}`, '결제 완료') ?
                                                     <div className='justify-center'>
-                                                        <button className="py-2 px-4 border bg-gray-900 text-white min-w-32">상품 준비 신청</button>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '상품 준비중') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">상품 준비 신청</button>
                                                     </div>
                                                     : <></>
                                                 }
                                                 {Object.is(`${item.deliStatus}`, '상품 준비중') ?
                                                     <div className='justify-center'>
-                                                        <button className="py-2 px-4 border bg-gray-900 text-white min-w-32">배송 대기중</button>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '배송 대기중') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">배송 대기 신청</button>
+                                                    </div>
+                                                    : <></>
+                                                }
+                                                {Object.is(`${item.deliStatus}`, '배송 대기중') ?
+                                                    <div className='justify-center'>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '배송중') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">배송 시작 신청</button>
+                                                    </div>
+                                                    : <></>
+                                                }
+                                                {Object.is(`${item.deliStatus}`, '배송중') ?
+                                                    <div className='justify-center'>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '배송 완료') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">배송 완료 신청</button>
+                                                    </div>
+                                                    : <></>
+                                                }
+                                                {Object.is(`${item.deliStatus}`, '배송 완료') ?
+                                                    <div className='justify-center'>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '교환중') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">교환 시작 신청</button>
+                                                    </div>
+                                                    : <></>
+                                                }
+                                                {Object.is(`${item.deliStatus}`, '교환중') ?
+                                                    <div className='justify-center'>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '교환 완료') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">교환 완료 신청</button>
+                                                    </div>
+                                                    : <></>
+                                                }
+                                                {Object.is(`${item.deliStatus}`, '교환 완료') ?
+                                                    <div className='justify-center'>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '환불중') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">환불 시작 신청</button>
+                                                    </div>
+                                                    : <></>
+                                                }
+                                                {Object.is(`${item.deliStatus}`, '환불중') ?
+                                                    <div className='justify-center'>
+                                                        <button onClick={() => { orderDeliState(item.ordDtlNo, '환불 완료') }} className="py-2 px-4 border bg-gray-900 text-white min-w-32">환불 완료 신청</button>
                                                     </div>
                                                     : <></>
                                                 }

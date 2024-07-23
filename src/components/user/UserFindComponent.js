@@ -53,6 +53,10 @@ function UserFindComponent(props) {
             return
         }
         selectMemberFindUserID(name, email).then((data) => {
+            if (data === '') {
+                window.confirm('찾는 아이디가 없습니다.')
+                return
+            }
             window.confirm('아이디는 [ ' + data + ' ] 입니다.')
             return
         })
@@ -73,15 +77,23 @@ function UserFindComponent(props) {
             setPwdInput(true)
         })
     }
-    const handleChangePasswordButton = () =>{
+    const handleChangePasswordButton = () => {
         if (pwd === '') {
             window.confirm('정보를 입력하세요.')
             return
         }
+
+        const pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~@#$!%*?&])[a-zA-Z\d~@#$!%*?&]{8,}$/
+
+        if(!pattern.test(pwd)){
+            window.confirm('비밀번호는 영어,숫자,특수문자로 이루어져야 하며 8글자 이상으로 입력하세요.')
+            return
+        }
+
         user.userId = userId
         user.pwd = pwd
 
-        modifyMemberChangePassword(user).then((data)=>{
+        modifyMemberChangePassword(user).then((data) => {
             window.confirm('비밀번호가 변경을 완료 했습니다.')
             moveToPath("/loginPage")
         })

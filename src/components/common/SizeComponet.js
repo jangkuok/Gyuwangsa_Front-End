@@ -22,7 +22,10 @@ function SizeComponet({ categoryNo, addSize }) {
 
     const [no, setNo] = useState(1)
 
+    const pattern = /^[0-9]$/;
+
     const handleChangeSize = (e) => {
+
         size[e.target.name] = e.target.value
         //size.no = no
         setSize({ ...size })
@@ -30,7 +33,7 @@ function SizeComponet({ categoryNo, addSize }) {
 
     const handleSaveSize = (pdType) => {
 
-        if (pdType=== '상의' || pdType=== '아웃터') {
+        if (pdType === '상의' || pdType === '아웃터') {
             if (size.sizeType === '' || size.attr1 === '' || size.attr2 === '' || size.attr3 === '' || size.attr4 === '' || size.sizeCnt === '') {
                 window.confirm('사이즈 정보를 입력하세요.')
                 return
@@ -50,6 +53,13 @@ function SizeComponet({ categoryNo, addSize }) {
                 return
             }
         }
+
+        if (!pattern.test(size.attr1) || !pattern.test(size.attr2) || !pattern.test(size.attr3) || !pattern.test(size.attr4) || !pattern.test(size.attr5) || !pattern.test(size.attr6) || !pattern.test(size.attrCnt)) {
+            window.confirm('숫자를 입력하세요.')
+            return
+        }
+
+
 
         size.pdType = pdType
         addSize(size)
@@ -337,6 +347,9 @@ function SizeComponet({ categoryNo, addSize }) {
                                 value={'사이즈'}
                                 readOnly />
                             <input type='text' className={`${textClass}`}
+                                value={'색  상'}
+                                readOnly />
+                            <input type='text' className={`${textClass}`}
                                 value={'수  량'}
                                 readOnly />
                         </div>
@@ -348,6 +361,13 @@ function SizeComponet({ categoryNo, addSize }) {
                                 value={size.sizeType}
                                 onChange={handleChangeSize}
                                 className={`${selectClass}`} />
+                            <input
+                                type='text'
+                                id='color'
+                                name='color'
+                                value={size.color}
+                                onChange={handleChangeSize}
+                                className={`${textClass}`} />
                             <input
                                 type='text'
                                 id='sizeCnt'

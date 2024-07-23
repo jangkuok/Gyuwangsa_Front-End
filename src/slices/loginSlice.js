@@ -6,8 +6,8 @@ import { getCookie, removeCookie, setCookie } from "../util/cookieUtil";
 //store -> slice -> reducer -> initState
 const initState ={
     userId : '',
-    //roleNm : ''
-
+    roleNm : '',
+    brandCd : '',
 }
 
 const loadUserCookie = () => {

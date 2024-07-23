@@ -3,12 +3,10 @@ import React, { useState } from 'react';
 
 
 function SizeInfoComponet({ categoryNo, addSizeList, deleteSizeList }) {
-
-
     return (
         <div>
             {addSizeList.map((size, i) =>
-                Object.is(`${categoryNo}`, '1') || Object.is(`${categoryNo}`, '3') ?
+                Object.is(`${categoryNo}`, '1') || Object.is(`${categoryNo}`, '3')?
                     <div className='grid grid-cols-10 mb-2' key={i}>
                         <p className='text-x text-gray-400 cursor-text items-center justify-center col-span-5' >
                             {size.sizeType} /

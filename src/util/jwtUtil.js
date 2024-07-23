@@ -69,7 +69,7 @@ const beforeRes = async (res) =>{
 
         const userCookieValue = getCookie('user')
 
-        console.log(userCookieValue)
+        console.log(userCookieValue.brandCd)
 
         const result = await refreshJWT(userCookieValue.accessToken,userCookieValue.refreshToken)
 

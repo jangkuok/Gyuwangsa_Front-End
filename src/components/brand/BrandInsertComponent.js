@@ -47,9 +47,8 @@ function BrandInsertComponent(props) {
     }
 
     const handleAddressButton = (data) => {
-        setPopup(!popup)
+        setPopup(!popup) 
     }
-
 
     //브랜드 등록
     const insertBrandButtonClick = () => {
@@ -61,10 +60,14 @@ function BrandInsertComponent(props) {
         const formData = new FormData()
 
         let logFile = ''
-
         let mainFile = ''
 
+        const emailPattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        const phonePattern = /^[0-9]{0,13}$/
+        const brandEngNmPattern = /[^a-zA-Z]/g
+        const korLPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
 
+    
         if (logUploadRef != null) {
             logFile = logUploadRef.current.files[0]
         }
@@ -74,16 +77,33 @@ function BrandInsertComponent(props) {
         }
 
 
-        if (brand.brandNm === '' || brand.engNm === '' || brand.addrNo === '' || brand.addr === '' || brand.addrDtl === '' || brand.comCall === '' || brand.comEmail === '' || brand.deliComp === '') {
+        if (brand.brandNm === '' || brand.engNm === '' || brand.addrNo === '' || brand.addr === '' || brand.addrDtl === '' || brand.comCall === '' || brand.comEmail === '' || brand.deliComp === '선택하세요' || brand.deliComp === '') {
             window.confirm('정보를 입력하세요.')
             return
         }
 
+        if(!korLPattern.test(brand.brandNm)){
+            window.confirm('브랜드 이름은 한글만 작성이 가능합니다.')
+            return
+        }
 
-        // if (logFile === undefined || mainFile === undefined) {
-        //     window.confirm('이미지를 등록 하세요.')
-        //     return
-        // }
+        if(!brandEngNmPattern.test(brand.engNm)){
+            window.confirm('브랜드 영어 이름으로 입력하세요.')
+            return
+        }
+
+        
+        if(!emailPattern.test(brand.comEmail)){
+            window.confirm('이메일 형식이 아닙니다.')
+            return
+        }
+
+        if(!phonePattern.test(brand.comCall)){
+            window.confirm('핸드폰 번호는 숫자만 작성이 가능합니다.')
+            return
+        }
+
+
         if (logFile === undefined) {
             window.confirm('이미지를 등록 하세요.')
             return
@@ -110,7 +130,6 @@ function BrandInsertComponent(props) {
             }
 
                 emailjs
-
                     .send(
                         'service_9rpos4p',
                         'template_h24hx3c',
@@ -154,6 +173,7 @@ function BrandInsertComponent(props) {
                                 name="brandNm"
                                 id="brandNm"
                                 onChange={handleChangeBrand}
+                                placeholder="브랜드 이름 입력"
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />
                         </div>
@@ -169,6 +189,7 @@ function BrandInsertComponent(props) {
                                 name="engNm"
                                 id="engNm"
                                 onChange={handleChangeBrand}
+                                placeholder="브랜드 영어 이름 입력"
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />
                         </div>
@@ -185,6 +206,7 @@ function BrandInsertComponent(props) {
                                     name="comCall"
                                     id="comCall"
                                     onChange={handleChangeBrand}
+                                    placeholder="회사 전화 번호 입력"
                                     className="block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -202,6 +224,7 @@ function BrandInsertComponent(props) {
                                     name="comEmail"
                                     id="comEmail"
                                     onChange={handleChangeBrand}
+                                    placeholder="이메일 입력"
                                     className="block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -253,7 +276,7 @@ function BrandInsertComponent(props) {
 
                         <div className="sm:col-span-1">
                             <button type="button"
-                                onClick={handleAddressButton}
+                                onClick={() => handleAddressButton()}
                                 className="rounded-md bg-gray-900 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">
                                 검  색
                             </button>
@@ -289,6 +312,7 @@ function BrandInsertComponent(props) {
                                 name="addrDtl"
                                 id="addrDtl"
                                 onChange={handleChangeBrand}
+                                placeholder="상세 주소 입력"
                                 className='block w-full p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
                             />
                         </div>

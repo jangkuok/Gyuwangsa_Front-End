@@ -37,13 +37,12 @@ function PdInfoSizeComponent({ sizeList, categoryNo }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-700">
                                         {changeSizeList && changeSizeList.map((size, i) => (
-                                            <tr>
+                                            <tr key={i}>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.sizeType}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr1}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr2}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr3}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr4}</td>
-                                                <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr5}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -69,7 +68,7 @@ function PdInfoSizeComponent({ sizeList, categoryNo }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-700">
                                         {changeSizeList && changeSizeList.map((size, i) => (
-                                            <tr>
+                                            <tr key={i}>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.sizeType}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr1}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr2}</td>
@@ -77,7 +76,6 @@ function PdInfoSizeComponent({ sizeList, categoryNo }) {
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr4}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr5}</td>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr6}</td>
-                                                <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.attr7}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -97,7 +95,7 @@ function PdInfoSizeComponent({ sizeList, categoryNo }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-700">
                                         {changeSizeList && changeSizeList.map((size, i) => (
-                                            <tr>
+                                            <tr key={i}>
                                                 <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{size.sizeType}</td>
                                             </tr>
                                         ))}

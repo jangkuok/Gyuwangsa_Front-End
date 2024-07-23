@@ -6,6 +6,8 @@ import ResultModal from '../common/ResultModal';
 import SizeComponet from '../common/SizeComponet';
 import SizeInfoComponet from '../common/SizeInfoComponet';
 import SizeModifyComponet from '../common/SizeModifyComponet';
+import { selectBrandNo } from '../../api/brandApi';
+import SizeInfoModifyComponet from '../common/SizeInfoModifyComponet';
 
 
 export const host = API_SERVER_HOST
@@ -42,18 +44,35 @@ function PdInfoModifyComponent({ pdNo }) {
 
     const [addSizeList, setAddSizeList] = useState([])
 
+    const [brandNm, setBrandNm] = useState('')
+
+    const [modify, setModify] = useState(-1)
+
 
     useEffect(() => {
         selectPdInfoByPdNo(pdNo).then(data => {
             setPdInfo(data)
             setAddSizeList([...data.sizeList])
+            selectBrandNo(data.brandNo).then((data) => {
+                setBrandNm(data.brandNm)
+            })
         })
+
     }, [pdNo])
 
     const handleChangePdInfo = (e) => {
         pdInfo[e.target.name] = e.target.value
         setPdInfo({ ...pdInfo })
 
+    }
+
+
+    //사이즈 수정
+    const handleChangeSize = (e) => {
+
+        addSizeList[modify][e.target.name] = e.target.value
+
+        setAddSizeList([...addSizeList])
     }
 
     //이미지 삭제
@@ -69,6 +88,7 @@ function PdInfoModifyComponent({ pdNo }) {
         const resultSizeList = addSizeList.filter(addSizeList => addSizeList.sizeType !== type)
         setAddSizeList(resultSizeList)
     }
+
 
     //사이즈 정보 주입
     const addSize = (s) => {
@@ -92,12 +112,9 @@ function PdInfoModifyComponent({ pdNo }) {
         formData.append("pdInfo", pdInfoDTO)
 
         modifyPdInfo(formData, pdNo).then(data => {
-            setResult("상품이 수정 되었습니다.")
+            window.confirm('상품을 수정했습니다.')
+            movePagePdInfo(pdNo)
         })
-    }
-
-    const closeModal = () => {
-        movePagePdInfo(pdNo)
     }
 
     const textClass = 'block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6'
@@ -110,14 +127,13 @@ function PdInfoModifyComponent({ pdNo }) {
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GYUWANGSA</h2>
                 </div>
                 <div className="border-b border-gray-900/10 pb-12">
-                    <label className="text-base text-gray-500 font-semibold mb-2 block">상품 등록</label>
-                    {/* <h2 className="text-base font-semibold leading-7 text-gray-900">상품 등록</h2> */}
-                    <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+                    <label className="text-base text-gray-500 font-semibold mb-2 block">상품 수정</label>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">This page is a product modification page.</p>
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                         {/* 브랜드 */}
                         <div className="sm:col-span-2">
-                            <label class="block text-sm font-medium leading-6 text-gray-900">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
                                 브랜드
                             </label>
                             <div className="mt-2">
@@ -125,9 +141,7 @@ function PdInfoModifyComponent({ pdNo }) {
                                     type="text"
                                     name="brandNm"
                                     id="brandNm"
-                                    //value={pdInfo.brandNm}
-                                    value={'엘무드'}
-                                    onChange={handleChangePdInfo}
+                                    value={brandNm}
                                     className='block w-4/5 p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:outline-none sm:text-sm sm:leading-6 bg-gray-100'
                                     readOnly
                                 />
@@ -197,10 +211,11 @@ function PdInfoModifyComponent({ pdNo }) {
                     </div>
                     {/* 등록한 사이즈 */}
                     <div>
-                    <SizeInfoComponet categoryNo={`${pdInfo.categoryNo}`} addSizeList={addSizeList} deleteSizeList={deleteSizeList} />
+                        <SizeInfoModifyComponet categoryNo={`${pdInfo.categoryNo}`} addSizeList={addSizeList} handleChangeSize={handleChangeSize} deleteSizeList={deleteSizeList} setModify={setModify} modify={modify} />
+                        {/* <SizeInfoComponet categoryNo={`${pdInfo.categoryNo}`} addSizeList={addSizeList} deleteSizeList={deleteSizeList} /> */}
                     </div>
                     {/* 사이드 등록  */}
-                    <SizeComponet categoryNo={`${pdInfo.categoryNo}`} addSize={addSize} />
+                    {/* <SizeComponet categoryNo={`${pdInfo.categoryNo}`} addSize={addSize} /> */}
                 </div>
 
                 {/* 파일 업로드 */}
@@ -271,12 +286,6 @@ function PdInfoModifyComponent({ pdNo }) {
                     </button>
                 </div>
             </div>
-
-
-
-            {/* 성공 모달 */}
-            {result ? <ResultModal title={'처리결과'} content={result} callbackFn={closeModal} /> : <></>}
-
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { getCartItemsAsync, postChangeCartAsync, postChangeCartPageAsync } from "../slices/cartSlice"
+import { getCartItemsAsync, postChangeCartAsync, postChangeCartPageAsync, postRemoveCartAsync } from "../slices/cartSlice"
 
 const useCustomCart = () => {
     const dispatch = useDispatch()
@@ -18,7 +18,11 @@ const useCustomCart = () => {
         dispatch(postChangeCartPageAsync(param))
     }
 
-    return {cartItems,refreshCart,changeCart,changeCartPage}
+    const removeCartItemNo = (param) => {
+        dispatch(postRemoveCartAsync(param))
+    }
+
+    return {cartItems,refreshCart,changeCart,changeCartPage,removeCartItemNo}
 }
 
 export default useCustomCart

@@ -1,20 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HeaderNavbarButton from "./HeaderNavbarButton";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../slices/loginSlice";
 import UserCustomLogin from "../hocks/userCustomLogin";
+import { getCookie } from "../util/cookieUtil";
 
 function HeaderNavbar() {
 
-  const loginState = useSelector(state => state.loginSlice)
+  const { doLogout } = UserCustomLogin()
 
-  const { doLogout, moveToPath } = UserCustomLogin()
+  const navigate = useNavigate()
 
-  const dispatch = useDispatch()
+  const { loginState } = UserCustomLogin()
+
+  const userRoleNm = loginState.roleNm
+
+  const brandAdmin = loginState.brandCd
+
+
 
   const logoutButton = () => {
     doLogout()
+  }
+
+
+  const brandLink = (brandCd) => {
+    navigate({ pathname: `/brand/${brandCd}` })
+    window.location.reload()
   }
 
 
@@ -32,12 +45,24 @@ function HeaderNavbar() {
               <Link to="/brand/brandList" className="text-white mr-3">
                 브랜드
               </Link>
-              <Link to="/user/myPage" className="text-white mr-3">
-                마이페이지
-              </Link>
-              <Link to="/user/cartPage" className="text-white mr-3">
-                장바구니
-              </Link>
+              {
+                brandAdmin !== 0 ?
+                  <Link to={''} className="text-white mr-3" onClick={() => { brandLink(brandAdmin); }}>
+                    나의 브랜드
+                  </Link>
+                  :
+                  <Link to="/user/myPage" className="text-white mr-3">
+                    마이페이지
+                  </Link>
+              }
+              {
+                userRoleNm !== 'BRAND_MANAGER' ?
+                  <Link to="/user/cartPage" className="text-white mr-3">
+                    장바구니
+                  </Link>
+                  : <></>
+              }
+
               <a onClick={logoutButton} className="text-white">로그아웃</a>
             </div>
             :
@@ -54,9 +79,9 @@ function HeaderNavbar() {
             </div>
           }
         </div>
-      </nav>
+      </nav >
       <HeaderNavbarButton />
-    </div>
+    </div >
 
 
 
