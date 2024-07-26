@@ -57,6 +57,13 @@ function HeaderNavbar() {
               }
               {
                 userRoleNm !== 'BRAND_MANAGER' ?
+                  <Link to="/user/like" className="text-white mr-3">
+                    좋아요
+                  </Link>
+                  : <></>
+              }
+              {
+                userRoleNm !== 'BRAND_MANAGER' ?
                   <Link to="/user/cartPage" className="text-white mr-3">
                     장바구니
                   </Link>

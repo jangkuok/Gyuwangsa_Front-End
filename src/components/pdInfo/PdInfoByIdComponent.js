@@ -171,34 +171,6 @@ function PdInfoByIdComponent({ pdNo }) {
     if (!Object.is('', choicePdInfo.color) && !Object.is('', choicePdInfo.size)) {
 
 
-        // const itemList = (list) => {
-        //     if (list.color === choicePdInfo.color && list.size === choicePdInfo.size) {
-        //         list.count = parseInt(list.count) + 1
-        //         setChoicePdInfo({ ...initStateChoice })
-        //         return true;
-        //     }
-        // }
-
-        // if (choicePdInfoList.filter(itemList) === false) {
-        //     setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
-        //     setChoicePdInfo({ ...initStateChoice })
-        // }
-
-        // const itemList = (list) => {
-        //     if (list.color !== choicePdInfo.color && list.size !== choicePdInfo.size) {
-        //         console.log(list)
-        //         setChoicePdInfoList([...choicePdInfoList, choicePdInfo])
-        //         setChoicePdInfo({ ...initStateChoice })
-
-        //     }else{
-        //         list.count = parseInt(list.count) + 1
-        //         setChoicePdInfo({ ...initStateChoice })
-        //         return true;
-        //     }
-        // }
-
-        // choicePdInfoList.filter(itemList)
-
         const itemList = (list) => {
             if (list.color === choicePdInfo.color && list.size === choicePdInfo.size) {
                 list.count = parseInt(list.count) + 1

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { modifyMemberChangePassword, selectMemberFindUserID, selectUserInfo } from '../../api/userApi';
 import UserCustomLogin from '../../hocks/userCustomLogin';
+import emailjs from 'emailjs-com';
+import { useNavigate } from 'react-router-dom';
 
 const initState = {
     userId: '',
@@ -29,6 +31,8 @@ function UserFindComponent(props) {
     const [pwdInput, setPwdInput] = useState(false)
 
     const [pwd, setPwd] = useState('')
+
+    const navigate = useNavigate()
 
     const handleFindName = (e) => {
         setName(e.target.value)
@@ -69,12 +73,42 @@ function UserFindComponent(props) {
             window.confirm('정보를 입력하세요.')
             return
         }
+        
+        const randomNo = Math.floor(Math.random() * 8999999) + 1000000;
+
+        user.userId = userId
+        user.pwd = randomNo
+
         selectUserInfo(userId).then((data) => {
             if (data.userId === null) {
                 window.confirm('존재하는 아이디가 없습니다.')
                 return
             }
-            setPwdInput(true)
+            //setPwdInput(true)
+            const templateParams = {
+                to_email: user.email,
+                from_name: 'gyuwangsa@gmail.com',
+                message: '임시 비밀번호는 [ ' + randomNo + ' ] 입니다.'  
+            }
+
+            emailjs
+                .send(
+                    'service_9rpos4p',
+                    'template_h24hx3c',
+                    templateParams,
+                    'bWhte-PRj6bqA6KFp',
+                )
+                .then((response) => {
+
+                    modifyMemberChangePassword(user)
+                    window.confirm('이메일로 임시 비밀번호를 보냈습니다.')
+                    navigate({ pathname: '/loginPage' }, { replace: true })
+                })
+                .catch((error) => {
+                    console.error('이메일 보내기 실패:', error);
+                    window.confirm('등록 실패')
+                    return;
+                })
         })
     }
     const handleChangePasswordButton = () => {
@@ -85,7 +119,7 @@ function UserFindComponent(props) {
 
         const pattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~@#$!%*?&])[a-zA-Z\d~@#$!%*?&]{8,}$/
 
-        if(!pattern.test(pwd)){
+        if (!pattern.test(pwd)) {
             window.confirm('비밀번호는 영어,숫자,특수문자로 이루어져야 하며 8글자 이상으로 입력하세요.')
             return
         }

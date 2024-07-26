@@ -231,7 +231,7 @@ function PdInfoSearchListComponent({ keyword }) {
                                     </Link>
                                     <div className="p-2">
                                         <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
-                                        <h3 className="text-lg font-bold text-gray-800">{pdInfo.pdName}</h3>
+                                        <h3 className="text-lg font-bold text-gray-800 max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap ">{pdInfo.pdName}</h3>
                                         <div className="mt-4 flex items-center flex-wrap gap-2">
                                             <h4 className="text-lg font-bold text-gray-800">\{ }{pdInfo.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
                                             {loginState.roleNm !== 'BRAND_MANAGER' ?

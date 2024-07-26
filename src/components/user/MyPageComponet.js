@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import UserCustomLogin from '../../hocks/userCustomLogin';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { host } from '../pdInfo/PdInfoByIdComponent';
 import { cancelPaymentByDeliNo, removeOrder, selectOrderListByUser } from '../../api/orderApi';
 import OrderPageComponent from '../order/OrderPageComponent';
-import { selectUserInfo } from '../../api/userApi';
+import { removeCartList, selectUserInfo } from '../../api/userApi';
 import dayjs from 'dayjs';
 import { FaUserAlt } from "react-icons/fa";
 
@@ -40,21 +40,25 @@ function MyPageComponet(props) {
 
     const [orderList, setOrderList] = useState(initStateList)
     const [userInfo, setUserInfo] = useState(initState)
+    const navigate = useNavigate()
 
-    const { loginState } = UserCustomLogin()
+    const { loginState, doLogout } = UserCustomLogin()
 
     const [page, setPage] = useState(1)
 
     const size = 10
 
     useEffect(() => {
-        selectOrderListByUser(loginState.userId, page, size).then(data => {
-            setOrderList(data)
-        })
+        if (loginState.userId !== '') {
+            selectOrderListByUser(loginState.userId, page, size).then(data => {
+                setOrderList(data)
+            })
 
-        selectUserInfo(loginState.userId).then((data) => {
-            setUserInfo(data)
-        })
+            selectUserInfo(loginState.userId).then((data) => {
+                setUserInfo(data)
+            })
+        }
+
     }, [loginState.userId, page, size])
 
     const handlerOrderCancelButton = (ordDtlNo, deliState) => {
@@ -71,6 +75,22 @@ function MyPageComponet(props) {
         removeOrder(ordDtlNo, deliState)
         window.confirm('결제 취소를 완료 했습니다.')
         window.location.reload()
+    }
+
+    const handleRemoveMember = () => {
+        if (window.confirm('회원 탈퇴를 하시겠습니까?') == false) {
+            return
+        }
+        removeCartList(loginState.userId).then((data) => {
+            if (data.result === '실패') {
+                window.confirm('구매 중인 상품이 존재하여 회원 탈퇴 진행이 불가능합니다.')
+                return
+            }
+            window.confirm('정상적으로 탈퇴에 성공했습니다. 감사합니다.')
+            navigate({ pathname: '/' }, { replace: true })
+            doLogout()
+        })
+
     }
 
     return (
@@ -91,11 +111,12 @@ function MyPageComponet(props) {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="text-center md:text-right space-y-2">
-                                    <div>
+                                <div className="text-center md:text-right space-y-2 ">
+                                    <div className='grid grid-cols-2 xl:grid-cols-1'>
                                         <Link to={`/user/modifyPage/${loginState.userId}`} >
                                             <button className="py-2 px-4 border bg-gray-900 text-white">프로필 관리</button>
                                         </Link>
+                                        <button onClick={() => { handleRemoveMember() }} className="py-2 px-4 border bg-gray-900 text-white">회원 탈퇴</button>
                                     </div>
                                 </div>
                             </div>

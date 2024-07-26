@@ -10,6 +10,7 @@ const UserJoinPage  = lazy(() => import("../pages/user/UserJoinPage"))
 const CartPage  = lazy(() => import("../pages/cart/CartPage"))
 const UserBrandSelectPage  = lazy(() => import("../pages/user/UserBrandSelectPage"))
 const UserFindPage  = lazy(() => import("../pages/user/UserFindPage"))
+const LikePage  = lazy(() => import("../pages/user/LikePage"))
 
 const userRouter = () => {
 
@@ -47,7 +48,10 @@ const userRouter = () => {
             path: 'userFindPage',
             element:<Suspense fallback={Loading}><UserFindPage/></Suspense>
         },
-        
+        {
+            path: 'user/like',
+            element:<Suspense fallback={Loading}><LikePage/></Suspense>
+        },
         
 
    ]

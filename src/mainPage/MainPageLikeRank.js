@@ -61,7 +61,7 @@ export default function MainPageLikeRank() {
 
   const productTemplate = (product) => {
     return (
-      <div className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:scale-[1.02] transition-all ml-3" >
+      <div className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:scale-[1.02] transition-all ml-3 " >
         <Link to={`/product/info/${product.pdNo}`} >
           <div className="w-full aspect-w-16 aspect-h-8 lg:h-80">
             <img src={`${host}/product/view/${product.imageList[0]}`} alt="Product 1"
@@ -70,9 +70,9 @@ export default function MainPageLikeRank() {
         </Link>
         <div className="p-2">
           <Link to={`/brand/${product.brandNo}`}>
-            <p className="text-[#767676] text-[14px]">[{product.brandNm}]</p>
+            <p className=" text-[#767676] text-[14px]">[{product.brandNm}]</p>
           </Link>
-          <h3 className="text-[15px]font-bold text-gray-800">{product.pdName}</h3>
+          <h3 className="text-[15px]font-bold text-gray-800 max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap ">{product.pdName}</h3>
           <div className="flex items-center flex-wrap gap-2">
             <h4 className="text-[13px] font-bold text-gray-800">\{ }{product.buyAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</h4>
           </div>

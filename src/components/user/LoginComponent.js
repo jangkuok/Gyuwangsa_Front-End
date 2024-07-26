@@ -26,16 +26,6 @@ function LoginComponent(props) {
     }
 
     const loginButton = (e) => {
-        // dispatch(loginPostAsync(loginParam))
-        // .unwrap()
-        // .then(data => {
-        //     if(data.error){
-        //         alert("아이디와 비밀번호를 확인해주세요")
-        //     }else{
-        //         navigate({pathname:'/'},{replace:true})
-        //     }
-        // })
-
         doLogin(loginParam).then(data => {
             if (data.error) {
                 alert("아이디와 비밀번호를 확인해주세요")
@@ -44,6 +34,18 @@ function LoginComponent(props) {
             }
         })
     }
+
+    const activeEnter = (e) => {
+        if (e.key === "Enter") {
+            doLogin(loginParam).then(data => {
+                if (data.error) {
+                    alert("아이디와 비밀번호를 확인해주세요")
+                } else {
+                    window.location.replace("/")
+                }
+            })
+        }
+      }
 
     const joinPage = () => {
         moveToPath("/userBrandSelectPage")
@@ -87,6 +89,7 @@ function LoginComponent(props) {
                             autoComplete="current-password"
                             onChange={handleChange}
                             value={loginParam.pwd}
+                            onKeyDown={(e) => activeEnter(e)}
                             className={textClass}
                         />
                     </div>

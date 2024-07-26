@@ -11,6 +11,13 @@ export const selectUserIdLikeChk = async (userId) => {
     return res.data
 }
 
+//유저 좋아요 상품 리스트
+export const selectUserIdLikePdInfo = async (userId) => {
+    const res = await jwtAxios.get(`${prefix}/list/${userId}`)
+    return res.data
+}
+
+
 //유저 좋아요 리스트
 export const insertPdLike = async (userId,pdNo) => {
     const res = await jwtAxios.get(`${prefix}/pick/${userId}/${pdNo}`)

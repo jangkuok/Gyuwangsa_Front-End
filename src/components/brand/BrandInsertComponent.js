@@ -126,7 +126,7 @@ function BrandInsertComponent(props) {
             const templateParams = {
                 to_email: brand.comEmail,
                 from_name: 'gyuwangsa@gmail.com',
-                message: data.brandNo
+                message: '안녕하세요. 브랜드 코드 번호는 [ ' + data.brandNo + ' ] 입니다.'
             }
 
                 emailjs
