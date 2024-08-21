@@ -14,26 +14,27 @@ function KakaoRedirectPage(props) {
 
     const dispatch = useDispatch()
 
-    const {moveToPath} = UserCustomLogin()
+    const { moveToPath } = UserCustomLogin()
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        getAccessToken(authCode).then(accessToken =>{
-            getUserWithAccessToken(accessToken).then(user =>{
+        getAccessToken(authCode).then(accessToken => {
+            getUserWithAccessToken(accessToken).then(user => {
                 dispatch(login(user))
-                if(user && user.note === '정보 수정 필요'){
+                if (user && user.note === '정보 수정 필요') {
                     moveToPath(`/user/modifyPage/${user.userId}`)
-                }else{
+                    window.location.reload()
+                } else {
                     window.location.replace("/")
                 }
             })
         })
 
-    },[authCode])
+    }, [authCode])
 
     return (
         <div>
-            {authCode}
+
         </div>
     );
 }

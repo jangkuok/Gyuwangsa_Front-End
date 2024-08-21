@@ -6,6 +6,8 @@ import { host } from "../components/pdInfo/PdInfoListComponent";
 import { selectBrandByKeyword } from "../api/brandApi";
 import { selectPdInfoByKeyword } from "../api/pdInfoApi";
 import UserCustomLogin from "../hocks/userCustomLogin";
+import { selectListCategory } from "../api/categoryApi";
+import HeadCategory from "./HeadCategory";
 
 const initStatePdInfoList = {
   dtoList: [],
@@ -71,17 +73,38 @@ function HeaderNavbarButton(props) {
       window.location.reload()
     }
   }
-  const brandPageMove = (brandNo) =>{
-    navigate({pathname:`/brand/${brandNo}`})
+  const brandPageMove = (brandNo) => {
+    navigate({ pathname: `/brand/${brandNo}` })
     window.location.reload()
   }
+
+
+  const [categoryList, setCategoryList] = useState([])
+  useEffect(() => {
+    selectListCategory().then(data => {
+      setCategoryList(data)
+    })
+  }, [])
+
+
+  const [show, setShow] = useState(false);
+
+  const [hover, setHover] = useState(false);
+
+  const handleMouseEnter = (catId) => {
+    setHover(catId);
+  };
+
+  const handleMouseLeave = () => {
+    setHover(null);
+  };
 
 
   return (
     <div className="w-full bg-[#F5F5F3] relative">
       <div className="max-w-container mx-auto">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full px-4 pb-4 lg:pb-0 h-full lg:h-24">
-          <div className="relative w-full lg:w-[300px] h-[50px] text-base text-primeColor bg-white flex items-center gap-2 justify-between px-6 rounded-xl">
+          <div className="relative w-full lg:w-[300px] h-[50px] text-base text-primeColor bg-white flex items-center gap-2 justify-between px-6 rounded-xl">               
             <input
               className="flex-1 h-full outline-none placeholder:text-[#C4C4C4] placeholder:text-[14px]"
               type="text"
@@ -112,17 +135,17 @@ function HeaderNavbarButton(props) {
                     }
                     {searchQuery && brandList.dtoList.map((brand, i) => (
                       // <Link to={`/brand/${brand.brandNo}`} key={i}>
-                        <div onClick={()=>{brandPageMove(brand.brandNo)}} key={i} className="max-w h-28 bg-gray-100 mb-3 flex items-center gap-3 cursor-pointer">
-                          <img className="w-16" src={`${host}/brand/view/${brand.brandLog}`} alt="brandLog" />
-                          <div className="flex flex-col gap-1">
-                            <p className="font-semibold text-lg">
-                              {brand.engNm}
-                            </p>
-                            <p className="text-xs text-gray-600">
-                              {brand.brandNm}
-                            </p>
-                          </div>
+                      <div onClick={() => { brandPageMove(brand.brandNo) }} key={i} className="max-w h-28 bg-gray-100 mb-3 flex items-center gap-3 cursor-pointer">
+                        <img className="w-16" src={`${host}/brand/view/${brand.brandLog}`} alt="brandLog" />
+                        <div className="flex flex-col gap-1">
+                          <p className="font-semibold text-lg">
+                            {brand.engNm}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            {brand.brandNm}
+                          </p>
                         </div>
+                      </div>
                       //</Link>
                     ))}
                   </div>

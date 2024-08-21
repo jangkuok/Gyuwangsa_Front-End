@@ -20,7 +20,6 @@ const initState = {
 
 function UserModifyInfoComponent(props) {
 
-
     const [user, setUser] = useState(initState)
 
     const { loginState } = UserCustomLogin()
@@ -29,7 +28,6 @@ function UserModifyInfoComponent(props) {
 
 
     useEffect(() => {
-
         selectUserInfo(loginState.userId).then((data) => {
             setUser(data)
             setAddress({ address: data.addr, zonecode: data.addrNo })
@@ -37,6 +35,7 @@ function UserModifyInfoComponent(props) {
 
     }, [loginState.userId])
 
+    
 
     // 주소 검색
     const [address, setAddress] = useState({
@@ -57,7 +56,6 @@ function UserModifyInfoComponent(props) {
         setUser({ ...user })
     }
 
-    console.log(user.pwd)
     //정보 수정
     const handleModifyButton = () => {
         user.addrNo = address.zonecode
@@ -89,9 +87,12 @@ function UserModifyInfoComponent(props) {
             return
         }
 
+        console.log(user)
+
         modifyUserInfo(user).then(() => {
+            console.log(user)
             window.confirm('회원 정보 수정을 완료했습니다.')
-            navigate({ pathname: `/` }, { replace: true })
+            navigate({ pathname: '/' }, { replace: true })
         })
 
     }
@@ -280,8 +281,37 @@ function UserModifyInfoComponent(props) {
                             />
                         </div>
 
-                        <input type='hidden' id='sexCd' name='sexCd' value={user.sexCd} />
+                        {/* 성별 */}
+                        <div className="sm:col-start-1">
+                            <label className={textTpyeClass}>
+                                성  별
+                            </label>
+                        </div>
+                        <div className="sm:col-span-2 ">
+                            <label className="text-base text-gray-500 font-semibold mb-2 mr-4">남</label>
+                            <label className="mr-4">
+                                <input
+                                    type="radio"
+                                    name="sexCd"
+                                    id="sexCd"
+                                    value={'남'}
+                                    onChange={handleChangeUser}
+                                />
+                            </label>
+                            <label className="text-base text-gray-500 font-semibold mb-2 mr-4">여</label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="sexCd"
+                                    id="sexCd"
+                                    value={'여'}
+                                    onChange={handleChangeUser}
+                                />
+
+                            </label>
+                        </div>
                     </div>
+
                 </div>
 
 

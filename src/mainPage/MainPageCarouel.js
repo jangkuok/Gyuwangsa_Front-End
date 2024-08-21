@@ -56,7 +56,7 @@ export default function MainPageCarouel() {
   const productTemplate = (image) => {
     return (
       <div>
-          <img className='h-96 w-full' src={`${image}`} />
+          <img className='sm:h-48 lg:h-96 xl:h-96 2xl:h-96 w-full' src={`${image}`} />
       </div>
     );
   };

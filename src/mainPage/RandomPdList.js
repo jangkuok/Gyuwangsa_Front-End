@@ -21,7 +21,7 @@ function RandomPdList(props) {
             <div className="border-b border-gray-300 pb-9">
                 <h2 className="text-lg font-extrabold text-gray-800">Random Product</h2>
                 <p className="text-[#767676] text-[14px]  mb-5">랜덤 상품</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-6">
                     {pdInfoList.map((pdInfo, i) => (
                         <div className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:scale-[1.02] transition-all" key={i}>
                             <Link to={`/product/info/${pdInfo.pdNo}`} >
@@ -32,7 +32,7 @@ function RandomPdList(props) {
                             </Link>
                             <div className="p-2">
                                 <Link to={`/brand/${pdInfo.brandNo}`}>
-                                    <p className="text-[#767676] text-[14px]">[{pdInfo.brandNm}]</p>
+                                    <p className="text-[#767676] text-[14px] max-w-[180px] flex-grow overflow-hidden text-ellipsis whitespace-nowrap ">[{pdInfo.brandNm}]</p>
                                 </Link>
                                 <h3 className="text-[15px] font-bold text-gray-800">{pdInfo.pdName}</h3>
                                 <div className="flex items-center flex-wrap gap-2">

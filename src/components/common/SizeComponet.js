@@ -18,11 +18,9 @@ const initState = {
 }
 function SizeComponet({ categoryNo, addSize }) {
 
-    const [size, setSize] = useState({ ...initState });
+    const [size, setSize] = useState({ ...initState })
 
-    const [no, setNo] = useState(1)
-
-    const pattern = /^[0-9]$/;
+    const pattern = /^[0-9]$/
 
     const handleChangeSize = (e) => {
 
@@ -38,6 +36,7 @@ function SizeComponet({ categoryNo, addSize }) {
                 window.confirm('사이즈 정보를 입력하세요.')
                 return
             }
+
         }
 
         if (pdType === '바지') {
@@ -45,6 +44,7 @@ function SizeComponet({ categoryNo, addSize }) {
                 window.confirm('사이즈 정보를 입력하세요.')
                 return
             }
+
         }
 
         if (pdType === '신발') {
@@ -54,10 +54,7 @@ function SizeComponet({ categoryNo, addSize }) {
             }
         }
 
-        if (!pattern.test(size.attr1) || !pattern.test(size.attr2) || !pattern.test(size.attr3) || !pattern.test(size.attr4) || !pattern.test(size.attr5) || !pattern.test(size.attr6) || !pattern.test(size.attrCnt)) {
-            window.confirm('숫자를 입력하세요.')
-            return
-        }
+      
 
 
 

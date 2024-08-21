@@ -49,12 +49,12 @@ export default function MainPageLikeRank() {
     },
     {
       breakpoint: '768px',
-      numVisible: 3,
+      numVisible: 5,
       numScroll: 4
     },
     {
       breakpoint: '640px',
-      numVisible: 2,
+      numVisible: 5,
       numScroll: 4
     }
   ];

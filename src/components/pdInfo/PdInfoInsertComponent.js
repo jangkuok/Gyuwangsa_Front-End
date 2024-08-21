@@ -140,6 +140,7 @@ function PdInfoInsertComponent() {
 
         pdInfo.sizeList = addSizeList
         pdInfo.brandNm = adminBrandNm
+        pdInfo.brandNo = adminBrandCd
 
         const jsonPdInfo = JSON.stringify(pdInfo)
 
@@ -170,8 +171,6 @@ function PdInfoInsertComponent() {
 
     return (
         <div>
-            <input type='hidden' id='brandNo' name='brandNo' value={adminBrandCd} />
-
             <div className="space-y-5 mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                 <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">GYUWANGSA</h2>

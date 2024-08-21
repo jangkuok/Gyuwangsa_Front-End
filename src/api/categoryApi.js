@@ -24,3 +24,9 @@ export const selectListBrandItem = async (categoryNo) => {
     const res = await axios.get(`${prefix}/brand/item/${categoryNo}`) 
     return res.data
 }
+
+export const insetCategoryItem = async (formData) => {
+    const header = { header: { 'Content-Tpye': 'multipart/form-data' } }
+    const res = await axios.post(`${prefix}/add`,formData,header) 
+    return res.data
+}

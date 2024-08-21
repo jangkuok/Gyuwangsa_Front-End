@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import HeaderNavbar from './HeaderNavbar';
 import Footer from './Footer';
 import SideMenu from '../components/menus/SideMenu';
+import HeadCategory from './HeadCategory';
 
 
 function BasicLayout({ children }) {
     return (
         <>
             <div className='w-full mx-auto'>
-                <HeaderNavbar />
+                <HeaderNavbar/>
                 <div className="max-w-container mt-28 mx-auto px-4">
                     <div className="w-full h-full flex pb-20 gap-10">
                         <SideMenu/>
@@ -16,8 +17,8 @@ function BasicLayout({ children }) {
                             {children}
                         </div>
                     </div>
-                    <Footer />
                 </div>
+                <Footer/>
             </div>
         </>
     );

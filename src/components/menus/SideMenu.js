@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard } from "react-icons/md";
-import { RiSettings4Line } from "react-icons/ri";
-import { TbReportAnalytics } from "react-icons/tb";
-import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
-import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
-import { Link } from 'react-router-dom';
 import {
   Card,
-  Typography,
   List,
   ListItem,
-  ListItemPrefix,
   Accordion,
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
 
-import { ChevronRightIcon, ChevronDownIcon, ShoppingBagIcon, PresentationChartBarIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { selectListCategory } from '../../api/categoryApi';
 import PageCustomMove from '../../hocks/pageCustomMove';
-import { Cookies, useCookies } from "react-cookie";
-import { setCookie } from "../../util/cookieUtil";
+import { Cookies } from "react-cookie";
 
 function SideMenu() {
 
