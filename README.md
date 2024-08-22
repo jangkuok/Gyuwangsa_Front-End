@@ -23,10 +23,11 @@
 ----
 ### **🙋‍♀️ 프로젝트 소개**
 
-- 무신사와 크림을 참고하여 제작한 전자상거래 사이트.(Front-End)
-- 2018년도 단품 쇼핑몰 제작 이후 실력 점검 및 프로젝트 확장, 보편적인 언어 경험을 위해 제작.
-- 전자상거래 플랫폼 개발에 많이 사용되는 React를 사용하여 React에 대한 개발 경험.
-- [Back-End](https://github.com/jangkuok/Gyuwangsa_Back-End.git) 와 Front-End 분리.
+- 무신사와 크림을 참고하여 제작한 전자상거래 사이트.(Back-End)
+- [2018년도 단품 쇼핑몰](https://github.com/jangkuok/outer_shopping_project.git) 제작 이후 실력 점검 및 프로젝트 확장, 보편적인 언어 경험을 위해 제작.([동영상](https://drive.google.com/drive/folders/1HrA6EeozBnJtGje6JHk7giiH3asLYbvx?usp=drive_link))
+- Back-End 와 [Front-End](https://github.com/jangkuok/Gyuwangsa_Front-End.git) 분리.
+- [기능 관련 영상 ](https://drive.google.com/drive/folders/16WGca8_N_nMLHFN5m-tMiSX9GuglpTeP?usp=drive_link)
+- [프로젝트 개발 전](https://github.com/jangkuok/Gyuwangsa.git) Spring으로 로그인 및 로그아웃, JWT 토큰 발급까지 연습 후 진행.
 ----
 ### **🗓 개발 기간**
 
