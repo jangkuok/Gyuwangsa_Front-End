@@ -149,9 +149,7 @@ function PdInfoByIdComponent({ pdNo }) {
     //마이너스
     const handleMinusCount = (index) => {
         choicePdInfoList[index].count = parseInt(choicePdInfoList[index].count) - 1
-        if (choicePdInfoList[index].count = 0) {
-            choicePdInfoList[index].count = 1
-        }
+
         setChoicePdInfo({ ...choicePdInfo })
     }
 
@@ -239,9 +237,13 @@ function PdInfoByIdComponent({ pdNo }) {
 
     }
 
-    const closeModal = () => {
-        pageList()
+    const handleWishList = () => {
+        if (loginState.userId === '') {
+            window.confirm('로그인이 필요합니다.')
+            return
+        }
     }
+
 
     const plusMinuceButton =
         "flex h-6 w-6 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500";
@@ -358,7 +360,7 @@ function PdInfoByIdComponent({ pdNo }) {
                                                     <p className="flex h-6 w-6 cursor-text items-center justify-center border-t border-b active:ring-gray-500">
                                                         {list.count}
                                                     </p>
-                                                    <button className={`${plusMinuceButton}`} onClick={() => { setAmount((prev) => prev + 1); handlePlusCount(i) }}> +</button>
+                                                    <button className={`${plusMinuceButton}`} onClick={() => { setAmount((prev) => prev + 1); handlePlusCount(i) }}>+</button>
                                                     <button className="flex h-6 w-6 ml-2 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                                         onClick={() => handleRemoveList(`${list.no}`)}>x</button>
                                                 </div>
@@ -380,7 +382,10 @@ function PdInfoByIdComponent({ pdNo }) {
                                 <BiShoppingBag className="mx-2" />
                                 Add to cart
                             </button>
-                            <button className="flex h-12 mb-5 items-center justify-center bg-gray-100 duration-100">
+                            <button
+                                onClick={() => handleWishList()}
+                                className="flex h-12 mb-5 items-center justify-center bg-gray-100 duration-100">
+
                                 <AiOutlineHeart className="mx-2" />
                                 Wishlist
                             </button>

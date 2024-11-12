@@ -153,8 +153,6 @@ function PdInfoInsertComponent() {
 
         formData.append("colorList", colorDTO)
 
-        console.log(jsonColor)
-
         insertPdInfo(formData).then(data => {
             window.confirm('상품 등록을 완료 했습니다.')
             movePagePdInfo(data.pdNo)

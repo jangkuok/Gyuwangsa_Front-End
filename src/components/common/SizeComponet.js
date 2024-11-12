@@ -54,7 +54,7 @@ function SizeComponet({ categoryNo, addSize }) {
             }
         }
 
-      
+
 
 
 
@@ -344,27 +344,29 @@ function SizeComponet({ categoryNo, addSize }) {
                                 value={'사이즈'}
                                 readOnly />
                             <input type='text' className={`${textClass}`}
-                                value={'색  상'}
-                                readOnly />
-                            <input type='text' className={`${textClass}`}
                                 value={'수  량'}
                                 readOnly />
                         </div>
                         <div className="grid grid-cols-9 gap-1">
-                            <input
-                                type='text'
+                            <select
                                 id="sizeType"
                                 name="sizeType"
                                 value={size.sizeType}
                                 onChange={handleChangeSize}
-                                className={`${selectClass}`} />
-                            <input
-                                type='text'
-                                id='color'
-                                name='color'
-                                value={size.color}
-                                onChange={handleChangeSize}
-                                className={`${textClass}`} />
+                                className={`${selectClass}`}
+                            >
+                                <option value={''}>선택하세요</option>
+                                <option value={'210'}>210</option>
+                                <option value={'220'}>220</option>
+                                <option value={'230'}>230</option>
+                                <option value={'240'}>240</option>
+                                <option value={'250'}>250</option>
+                                <option value={'260'}>260</option>
+                                <option value={'270'}>270</option>
+                                <option value={'280'}>280</option>
+                                <option value={'290'}>290</option>
+                                <option value={'FREE'}>FREE</option>
+                            </select>
                             <input
                                 type='text'
                                 id='sizeCnt'

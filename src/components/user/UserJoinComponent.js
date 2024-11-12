@@ -91,6 +91,8 @@ function UserJoinComponent(props) {
     const handleJoinButton = () => {
         user.addrNo = address.zonecode
         user.addr = address.address
+        
+        console.log(brandNm)
 
         const pattern = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,}$/
         const emailPattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
@@ -129,7 +131,7 @@ function UserJoinComponent(props) {
         
         if (brandNm !== '') {
 
-            if(brandNo !== 0|| brandNm === ''){
+            if(brandNo === 0 || brandNm === ''){
                 window.confirm('브랜드 정보를 입력하세요.')
                 return
             }

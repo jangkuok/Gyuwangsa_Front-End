@@ -55,8 +55,8 @@ function BrandInsertComponent(props) {
 
         brand.addr = address.address
         brand.addrNo = address.zonecode
-        brand.engNm = brand.engNm.toUpperCase()
 
+        console.log(brand)
         const formData = new FormData()
 
         let logFile = ''
@@ -64,7 +64,7 @@ function BrandInsertComponent(props) {
 
         const emailPattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
         const phonePattern = /^[0-9]{0,13}$/
-        const brandEngNmPattern = /[^a-zA-Z]/g
+        const brandEngNmPattern = /^[a-z|A-Z]+$/
         const korLPattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
 
     
@@ -111,6 +111,8 @@ function BrandInsertComponent(props) {
 
         console.log(mainFile)
 
+        
+        brand.engNm = brand.engNm.toUpperCase()
         formData.append("logFile", logFile)
         formData.append("mainFile", mainFile)
 

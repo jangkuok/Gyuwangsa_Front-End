@@ -104,6 +104,8 @@ function SizeInfoModifyComponet({ categoryNo, addSizeList, handleChangeSize, del
                                 </p>
                                 <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                     onClick={() => { setModify(() => i) }}>수 정</button>
+                                <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    onClick={() => { deleteSizeList(size.sizeType) }}>삭 제</button>
                             </div>
                         }
                     </div>
@@ -230,6 +232,8 @@ function SizeInfoModifyComponet({ categoryNo, addSizeList, handleChangeSize, del
                                 </p>
                                 <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                     onClick={() => { setModify(() => i) }}>수 정</button>
+                                <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    onClick={() => { deleteSizeList(size.sizeType) }}>삭 제</button>
                             </div>
                         }
                     </div>
@@ -238,18 +242,66 @@ function SizeInfoModifyComponet({ categoryNo, addSizeList, handleChangeSize, del
 
             {addSizeList && addSizeList.map((size, i) =>
                 Object.is(`${categoryNo}`, '4') ?
-                    <div className='grid grid-cols-10 mb-2' key={i}>
-                        <p className='text-x text-gray-400 cursor-text items-center justify-center col-span-1' >
-                            {size.sizeType} /
-                            수  량 : {size.sizeCnt}
-                        </p>
-                        <button className="flex h-6 w-12cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                            onClick={() => { deleteSizeList(size.sizeType) }}>삭 제</button>
+                    <div className='grid grid-cols-4 mb-2' key={i}>
+                        {modify === i ?
+                            <div>
+                                <div className="grid grid-cols-4 gap-1">
+                                    <input type='text' className={`${textClass}`}
+                                        value={'사이즈'}
+                                        readOnly />
+                                    <input type='text' className={`${textClass}`}
+                                        value={'색  상'}
+                                        readOnly />
+                                    <input type='text' className={`${textClass}`}
+                                        value={'수  량'}
+                                        readOnly />
+                                </div>
+                                <div className="grid grid-cols-4 gap-1">
+                                    <input
+                                        type='text'
+                                        id='sizeTpye'
+                                        name='sizeTpye'
+                                        value={size.sizeType}
+                                        onChange={handleChangeSize}
+                                        className='block w p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  focus:outline-none sm:text-sm sm:leading-6 text-center bg-gray-100'
+                                        readOnly />
+                                    <input
+                                        type='text'
+                                        id='color'
+                                        name='color'
+                                        value={size.color}
+                                        onChange={handleChangeSize}
+                                        className='block w p-2 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  focus:outline-none sm:text-sm sm:leading-6 text-center bg-gray-100'
+                                        readOnly />
+                                    <input
+                                        type='text'
+                                        id='sizeCnt'
+                                        name='sizeCnt'
+                                        value={size.sizeCnt}
+                                        onChange={handleChangeSize}
+                                        className={`${textClass}`} />
+                                    <button
+                                        className={`${buttonClass}`} onClick={() => { setModify(() => -1) }}>
+                                        등록</button>
+                                </div>
+                            </div>
+                            :
+                            <div className='grid grid-cols-7 mb-2 '>
+                                <p className='text-x text-gray-400 cursor-text items-center justify-center col-span-4' >
+                                    {size.sizeType} /
+                                    수  량 : {size.sizeCnt}
+                                </p>
+                                <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    onClick={() => { setModify(() => i) }}>수 정</button>
+                                <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    onClick={() => { deleteSizeList(size.sizeType) }}>삭 제</button>
+                            </div>
+                        }
                     </div>
 
                     : <></>
             )}
-
+            {/* 
             {addSizeList && addSizeList.map((size, i) =>
                 Object.is(`${categoryNo}`, '1') || Object.is(`${categoryNo}`, '3') ?
                     <div className='grid grid-cols-1 mb-2' key={i}>
@@ -304,11 +356,13 @@ function SizeInfoModifyComponet({ categoryNo, addSizeList, handleChangeSize, del
                                 </p>
                                 <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                     onClick={() => { setModify(() => i) }}>수 정</button>
+                                <button className="flex h-6 w-12 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
+                                    onClick={() => { deleteSizeList(size.sizeType) }}>삭 제</button>
                             </div>
                         }
                     </div>
                     : <></>
-            )}
+            )} */}
         </div>
     );
 }
